@@ -35,13 +35,18 @@ Kesalahan yang pernah lolos di video "Gosip Kantor" dan TIDAK BOLEH terulang:
 - kartu yang masuk (COPY) menutupi sebagian kartu lain sampai teksnya terbaca "ERS" — elemen tidak boleh menutup SEBAGIAN teks elemen lain, termasuk saat animasi;
 - wadah/tombol kosong muncul sebelum teksnya — wadah dan isinya tampil bersamaan;
 - separuh bawah layar kosong melompong — komposisi harus seimbang memakai area aman 220–1500 px;
+- (Cetak Biru v3) label "LEMBAR 03/06" ditabrak garis putus-putus "SKALA 1:1" — teks tidak boleh disilang/ditempel garis,
+  penggaris, garis ukur, atau garis grid tebal; beri jarak ≥ 16 px;
+- (Cetak Biru v3) lencana "tayang sendiri" menimpa titik ujung garis waktu JADWAL — lencana/label harus berdiri di luar
+  titik dan garis, bukan di atasnya;
 - ukuran piksel sprite berbeda antar karakter — sprite pixel diskalakan dengan faktor bulat yang SAMA (NEAREST) untuk semua karakter di satu adegan.
 
 Alat wajib (`toolkit/layout.py`):
 - `rich_text()` untuk SEMUA teks yang punya kata *highlight* (spasi dan padding otomatis);
 - `fit_text()` untuk teks di dalam gelembung/kartu/tombol (mengecil otomatis supaya muat);
 - `icon_label()` untuk tombol/label berikon; `ticker()` untuk teks berjalan;
-- `Layout`: setiap frame, daftarkan semua kotak penting (teks, ikon, kartu, sprite) lalu `check()`.
+- `Layout`: setiap frame, daftarkan semua kotak penting (teks, ikon, kartu, sprite) DAN semua garis (`kind='line'`, tiap ruas)
+  serta penanda (`kind='marker'`: titik, simpul, centang) lalu `check()`. Garis/penanda yang tidak didaftarkan dianggap pelanggaran.
   Jalankan pemeriksaan ini untuk SETIAP frame (atau minimal tiap 3 frame) di seluruh video, termasuk frame transisi.
   Jumlah masalah harus NOL sebelum ekspor. Tumpukan yang memang disengaja ditandai `allow=[...]`, dan elemen yang
   menutup elemen lain harus menutupnya PENUH (tidak boleh setengah menutup teks).
@@ -89,6 +94,10 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 
 ### Tahap RENDER (dari `render`) dan REVISI (dari `revisi`)
 - Ambil konsep yang dipilih (`pilih`) + `catatan`. Untuk revisi, ikuti `catatan` dan pertahankan yang tidak diminta diubah.
+- **Lampiran revisi:** bila pesanan punya `lampiran` (daftar URL `/_blob/<id>`), itu tangkapan layar dari Jers yang menunjukkan
+  bagian yang salah. Unduh tiap gambar dengan alat `Artifact` (`action: "read"`, `url` Kantor Agent, `path: "<id>"`), lalu LIHAT
+  (Read). Cari adegan yang cocok di video, perbaiki, dan sebutkan di `log` bagaimana tiap lampiran ditangani.
+  Setiap kesalahan baru dari lampiran juga jadi pelajaran: tambahkan pemeriksaannya ke kode render-mu sebelum ekspor.
 - **Naskah suara:** ubah naskah Rusdi menjadi kalimat lisan yang enak didengar (jangan membaca tanda bintang).
   Simpan tiap kalimat sebagai satu baris.
 - **Voice over** (bila `vo` true): `creative_list_voices` hanya bila `studio_meta.voice_id` kosong (pilih suara pria muda Indonesia

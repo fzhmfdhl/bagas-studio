@@ -44,7 +44,10 @@ class Layout:
         self.W, self.H, self.safe, self.items = W, H, safe, {}
 
     def box(self, name, bbox, kind='card', parent=None, pad=0, allow=(), safe=True, moving=False):
-        """kind: text | icon | card | sprite | deco. parent: nama wadah (teks/ikon harus di dalamnya dengan jarak pad).
+        """kind: text | icon | card | sprite | line | marker | deco.
+        line = garis, penggaris, garis putus-putus, sumbu, garis waktu (daftarkan bbox tiap ruas);
+        marker = titik/simpul/ujung garis waktu, centang, bintang kecil. Keduanya TIDAK boleh menyentuh teks, ikon, atau kartu.
+        deco = latar/tekstur yang memang di belakang semuanya (tidak diperiksa). parent: nama wadah (teks/ikon harus di dalamnya dengan jarak pad).
         allow: nama elemen yang SENGAJA boleh bertumpuk. safe=False untuk elemen dekoratif yang boleh ke tepi.
         moving=True untuk elemen yang sedang masuk/keluar (tetap diperiksa terhadap teks)."""
         self.items[name] = dict(name=name, bbox=tuple(map(float, bbox)), kind=kind, parent=parent, pad=pad, allow=set(allow), safe=safe, moving=moving)
@@ -55,7 +58,8 @@ class Layout:
         1. teks/ikon wajib di dalam wadahnya (parent) dengan jarak pad;
         2. teks/ikon/kartu tidak boleh keluar layar; teks tidak boleh masuk zona tidak aman;
         3. teks tidak boleh tertimpa elemen lain (kecuali parent/anak atau allow);
-        4. ikon tidak boleh menimpa teks; kartu tidak boleh saling menimpa sebagian (>2%) kecuali allow."""
+        4. ikon tidak boleh menimpa teks; kartu tidak boleh saling menimpa sebagian (>2%) kecuali allow;
+        5. garis (line) dan penanda (marker) tidak boleh menyentuh teks, ikon, atau kartu (beri jarak)."""
         out = []; it = self.items; W, H, s = self.W, self.H, self.safe
         for n, e in it.items():
             b = e['bbox']
@@ -78,6 +82,9 @@ class Layout:
                 if ov <= 0: continue
                 kinds = {a['kind'], c['kind']}
                 small = min(_area(a['bbox']), _area(c['bbox'])) or 1
+                if kinds & {'line', 'marker'} and kinds & {'text', 'icon', 'card'}:
+                    if _anc(it, a, c['name']) or _anc(it, c, a['name']): continue
+                    out.append('garis/penanda menabrak: %s x %s' % (a['name'], c['name'])); continue
                 if 'text' in kinds and 'deco' not in kinds:
                     # teks tertimpa sesuatu yang bukan wadahnya
                     if _anc(it, a, c['name']) or _anc(it, c, a['name']): continue
