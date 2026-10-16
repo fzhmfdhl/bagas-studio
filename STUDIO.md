@@ -25,6 +25,32 @@ ARTIFACT KANTOR AGENT: `https://claude.ai/artifact/F4zRgSnB1rPChYMEyiXtjr`
 6. **Kualitas sebelum kecepatan**, tapi selesaikan satu tahap dalam satu sesi (target < 40 menit).
 
 ---------------------------------------------------------------------------------------------------
+## Disiplin kerapian (WAJIB, Jers sangat memperhatikan ini)
+
+Kesalahan yang pernah lolos di video "Gosip Kantor" dan TIDAK BOLEH terulang:
+- kata highlight menempel ke kata sebelah ("itu[tangan]tim", "Patokan:[selera]&") — highlight harus punya spasi normal di kiri-kanan;
+- highlight menyembul keluar dari gelembung bicara — semua teks harus utuh di dalam wadahnya dengan padding ≥ 24 px;
+- label ticker "BREAKING" terpotong di tepi layar — label harus utuh, teks berjalan hanya di kanan label;
+- ikon menimpa teks tombol ("carousel");
+- kartu yang masuk (COPY) menutupi sebagian kartu lain sampai teksnya terbaca "ERS" — elemen tidak boleh menutup SEBAGIAN teks elemen lain, termasuk saat animasi;
+- wadah/tombol kosong muncul sebelum teksnya — wadah dan isinya tampil bersamaan;
+- separuh bawah layar kosong melompong — komposisi harus seimbang memakai area aman 220–1500 px;
+- ukuran piksel sprite berbeda antar karakter — sprite pixel diskalakan dengan faktor bulat yang SAMA (NEAREST) untuk semua karakter di satu adegan.
+
+Alat wajib (`toolkit/layout.py`):
+- `rich_text()` untuk SEMUA teks yang punya kata *highlight* (spasi dan padding otomatis);
+- `fit_text()` untuk teks di dalam gelembung/kartu/tombol (mengecil otomatis supaya muat);
+- `icon_label()` untuk tombol/label berikon; `ticker()` untuk teks berjalan;
+- `Layout`: setiap frame, daftarkan semua kotak penting (teks, ikon, kartu, sprite) lalu `check()`.
+  Jalankan pemeriksaan ini untuk SETIAP frame (atau minimal tiap 3 frame) di seluruh video, termasuk frame transisi.
+  Jumlah masalah harus NOL sebelum ekspor. Tumpukan yang memang disengaja ditandai `allow=[...]`, dan elemen yang
+  menutup elemen lain harus menutupnya PENUH (tidak boleh setengah menutup teks).
+
+Pemeriksaan visual wajib setelah ekspor: `python3 toolkit/studio.py audit final.mp4 audit/ 0.33`, lalu BUKA SEMUA lembar
+`periksa_*.jpg` (Read) satu per satu — bukan hanya sampel. Catat setiap kejanggalan (terpotong, menempel, bertumpuk,
+kosong, tidak seimbang, salah ketik), perbaiki, render ulang, audit ulang. Tulis ringkas hasil audit di `log` pesanan.
+
+---------------------------------------------------------------------------------------------------
 ## Data (ArtifactData, url Kantor Agent di atas)
 
 Semua dokumen ada di collection **`data/users/me`** (privat milik Jers).
@@ -72,9 +98,9 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
   Jangan pernah memanggil ulang generate untuk "mencoba lagi" (memakan kredit Jers).
 - **Bangun video** dengan Python (PIL/numpy/cairo/apa pun yang kamu pasang dengan pip). Durasi tiap adegan mengikuti suaranya.
   Teks di layar harus sinkron dengan ucapan. Musik buatan sendiri, dikecilkan saat bicara (`duck`).
-- **Periksa sendiri (wajib):** render 8–12 cuplikan di sepanjang video, gabung dengan `toolkit/studio.py sheet`, lalu
-  LIHAT gambarnya (Read). Cek: teks terpotong/keluar zona aman, tabrakan, terlalu padat, kontras, salah ejaan, adegan kosong,
-  sinkron teks dan suara. Perbaiki lalu cek ulang (maksimal 3 putaran).
+- **Periksa sendiri (wajib):** ikuti bagian *Disiplin kerapian*: `Layout.check()` nol masalah di semua frame, lalu
+  `toolkit/studio.py audit` dan lihat SEMUA lembar periksa. Cek juga kontras, salah ejaan, sinkron teks dan suara.
+  Perbaiki lalu cek ulang (maksimal 4 putaran). Frame kunci konsep juga wajib lolos `Layout.check()`.
 - **Ekspor** `final.mp4` (1080x1920). Unggah ke Cloudinary: panggil alat Cloudinary `sign-upload` dengan
   `{"folder":"bagas-studio","public_id":"<id pesanan>-v<nomor>"}`, simpan hasilnya ke `sign.json`, lalu
   `python3 toolkit/studio.py upload final.mp4 sign.json video` → URL publik (untuk Instagram).
@@ -86,7 +112,8 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 ---------------------------------------------------------------------------------------------------
 ## Bahan yang tersedia di repo
 
-- `toolkit/studio.py` — `VideoWriter`, `voice_segments`/`vo-split`, `Synth`, `duck`, `mix`, `contact_sheet`/`sheet`,
+- `toolkit/layout.py` — `Layout` (cek tabrakan/keluar batas), `rich_text`, `fit_text`, `icon_label`, `ticker`.
+- `toolkit/studio.py` — `VideoWriter`, `audit`, `voice_segments`/`vo-split`, `Synth`, `duck`, `mix`, `contact_sheet`/`sheet`,
   `cloud_upload`/`upload`, `preview_copy`, `font()` (Poppins Regular/Medium/Bold), `sprite()`.
 - `assets/sprites/` — sprite asli kantor: `rusdi_h_0` (berdiri), `rusdi_h_7..10` (jalan), `rusdi_k_6..12` (pegang kopi),
   `rusdi_p_0..2` (beanbag), `bagas_s_*`, `bagas_w_*` (jalan), `bagas_q_*` (duduk di kursi), `cat_*` (kucing Mario),

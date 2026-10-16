@@ -7,6 +7,9 @@ Pakai sebagai pustaka (import) atau dari baris perintah:
   python3 toolkit/studio.py sheet     <out.jpg> <frame1.png> [frame2.png ...]
   python3 toolkit/studio.py upload    <file> <sign.json> [image|video]
   python3 toolkit/studio.py probe     <file>
+  python3 toolkit/studio.py audit     <video.mp4> <outdir> [interval_detik=0.33]
+      -> potong video jadi lembar periksa besar (6 frame per lembar, 360x640 per frame)
+         untuk DILIHAT satu per satu (Read). Wajib sebelum unggah.
 
 Pustaka:
   from toolkit.studio import VideoWriter, load_wav, split_voice, Synth, mix, duck, contact_sheet, font
@@ -263,6 +266,18 @@ def sprite(name):
     return im, a[0], a[1]
 
 
+def audit(video, outdir, step=0.33):
+    import glob
+    os.makedirs(outdir, exist_ok=True); fr = os.path.join(outdir, 'fr'); os.makedirs(fr, exist_ok=True)
+    for f in glob.glob(os.path.join(fr, '*.png')): os.remove(f)
+    subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', video, '-vf', 'fps=%f,scale=360:640' % (1 / step), os.path.join(fr, 'f%04d.png')], check=True)
+    fs = sorted(glob.glob(os.path.join(fr, '*.png'))); sheets = []
+    for k in range(0, len(fs), 6):
+        out = os.path.join(outdir, 'periksa_%03d.jpg' % (k // 6)); contact_sheet(out, fs[k:k + 6], cols=3, w=360)
+        sheets.append((out, round(k * step, 2), round(min(len(fs), k + 6) * step, 2)))
+    return sheets
+
+
 if __name__ == '__main__':
     cmd = sys.argv[1] if len(sys.argv) > 1 else ''
     if cmd == 'vo-split':
@@ -276,6 +291,8 @@ if __name__ == '__main__':
     elif cmd == 'upload':
         rt = sys.argv[4] if len(sys.argv) > 4 else 'video'
         print(cloud_upload(sys.argv[2], json.load(open(sys.argv[3])), rt))
+    elif cmd == 'audit':
+        for o, a, b in audit(sys.argv[2], sys.argv[3], float(sys.argv[4]) if len(sys.argv) > 4 else .33): print('%s  detik %.2f-%.2f' % (o, a, b))
     elif cmd == 'probe':
         print(json.dumps(probe(sys.argv[2])))
     else:
