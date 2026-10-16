@@ -96,6 +96,9 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
   **`generations_count: 1`**, teks semua baris dipisah baris kosong; polling `creative_get_flow_run_status`;
   unduh `content_url` dengan curl; potong per baris: `python3 toolkit/studio.py vo-split vo.mp3 lines.json vo/`.
   Jangan pernah memanggil ulang generate untuk "mencoba lagi" (memakan kredit Jers).
+  Simpan identitas suara di pesanan (`video.vo: {flow_id, session_ids, generation_id, baris:[...]}`). Saat REVISI yang
+  tidak mengubah naskah, JANGAN membuat suara baru: ambil ulang `content_url` lewat `creative_get_flow_run_status`
+  dengan flow_id dan session_ids yang tersimpan, lalu unduh lagi.
 - **Bangun video** dengan Python (PIL/numpy/cairo/apa pun yang kamu pasang dengan pip). Durasi tiap adegan mengikuti suaranya.
   Teks di layar harus sinkron dengan ucapan. Musik buatan sendiri, dikecilkan saat bicara (`duck`).
 - **Periksa sendiri (wajib):** ikuti bagian *Disiplin kerapian*: `Layout.check()` nol masalah di semua frame, lalu
