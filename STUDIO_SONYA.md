@@ -68,8 +68,8 @@ Dua konsep per pesanan harus benar-benar berbeda dalam metafora dan alur, walau 
 ---------------------------------------------------------------------------------------------------
 ## Suara
 
-- Suara Nuancier: perempuan Indonesia ramah dan muda. Default **Kak Ceria** `d15jrIAARvF899pDoC6T`
-  (alternatif: Luna `BfwyZzLnL4udYd1qYpiN`). Pakai `studio_meta.voice_id_nua` bila ada; kalau kosong, simpan default di atas.
+- Suara Nuancier: perempuan Indonesia ramah dan muda. Default **Luna** `BfwyZzLnL4udYd1qYpiN`
+  (pilihan Jers; alternatif lama: Kak Ceria `d15jrIAARvF899pDoC6T`). Pakai `studio_meta.voice_id_nua` bila ada; kalau kosong, simpan default di atas. Voice over WAJIB ada di setiap video motion Nuancier (`vo: true`), dan harus terdengar di hasil akhir (periksa `ffmpeg ... volumedetect`: rata-rata sekitar -20 dB, bukan senyap).
   Jangan memanggil `creative_list_voices` kecuali suara itu gagal dipakai.
 - Panggilan sama seperti Bagas: `creative_generate_speech`, `model_id: "eleven_v4"`, **`generations_count: 1`**, baris dipisah baris kosong,
   polling `creative_get_flow_run_status`, unduh `content_url` dengan curl, `python3 toolkit/studio.py vo-split vo.mp3 lines.json vo/`.
