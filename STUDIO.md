@@ -24,26 +24,15 @@ ARTIFACT KANTOR AGENT: `https://claude.ai/artifact/F4zRgSnB1rPChYMEyiXtjr`
    jangan taruh teks penting di 220 px teratas, 420 px terbawah, dan 140 px paling kanan.
 6. **Kualitas sebelum kecepatan**, tapi selesaikan satu tahap dalam satu sesi (target < 40 menit).
 7. **Cek merek pesanan dulu** (field `brand`). Tidak ada atau `"jers"` = konten pribadi Jers (aturan di atas).
-   `"nua"` = konten **Nuancier Studio** — baca bagian "Pesanan Nuancier Studio" di bawah; aturan itu MENGGANTIKAN aturan 2.
+   `"nua"` = konten **Nuancier Studio** — bukan urusanmu; dikerjakan Studio Sonya (lihat bagian "Pesanan Nuancier Studio").
 
 ---------------------------------------------------------------------------------------------------
-## Pesanan Nuancier Studio (`brand: "nua"`)
+## Pesanan Nuancier Studio (`brand: "nua"`) — BUKAN urusan Studio Bagas
 
-Nuancier Studio adalah **studio desain logo** milik Jers. Akun Instagram-nya akun bisnis, bukan akun pribadi.
-Untuk pesanan ini kamu bekerja sebagai **Sonya** (AI desainer grafis dan motion graphic Nuancier); naskah ditulis **Herman**
-(AI project manager Nuancier). Semua teknis (toolkit, kerapian, audit, VO, unggah, data) sama persis dengan pesanan biasa.
-
-- Suara konten: brand **Nuancier** / "kami". **Jangan** menulis Jers, Paduka, Rusdi, Bagas, atau @jerapahmerah_.
-- Yang boleh tampil hanya **Herman** dan **Sonya** (`assets/sprites/herman_*`, `sonya_*`, `avatar_herman.png`, `avatar_sonya.png`),
-  itu pun hanya bila konsepnya butuh tokoh. Konten logo biasanya lebih kuat tanpa tokoh: bentuk, grid, kurva, warna, tipografi.
-- Tema: edukasi logo dan identitas merek, proses kerja studio, before-after (hanya dari bahan yang diberi Jers), ajakan memesan logo.
-  **Jangan mengarang klien, logo klien, testimoni, harga, atau angka.** Logo contoh harus jelas fiktif dan buatanmu sendiri,
-  tidak boleh meniru logo merek nyata.
-- Rasa visual: rapi, presisi, "studio desain profesional" (grid konstruksi, garis bantu, swatch warna, tipografi tegas).
-  Gaya tetap wajib orisinal dan tidak boleh sama dengan 6 entri terakhir `gaya_riwayat_nua` di `studio_meta`
-  (riwayat gaya Nuancier dipisah dari Jers; simpan 12 terakhir di field itu).
-- Notifikasi push: awali dengan "Sonya:" (contoh: "Sonya: 2 konsep video Nuancier siap dipilih").
-- Penanda akhir video (bila ada): "Nuancier Studio" — tanpa handle Instagram kecuali naskah memberikannya.
+Pesanan Nuancier Studio (akun bisnis desain logo milik Jers) dikerjakan oleh **Studio Sonya** dengan panduan sendiri
+(`STUDIO_SONYA.md`) dan jadwal sendiri. Sebagai Bagas, **lewati semua pesanan berbrand `nua`**: jangan kunci, jangan ubah,
+jangan kerjakan, walaupun statusnya `antre`/`render`/`revisi`. Saring di sisimu setelah query.
+Kalau satu-satunya pesanan yang menunggu berbrand `nua`, anggap tidak ada pekerjaan.
 
 ---------------------------------------------------------------------------------------------------
 ## Disiplin kerapian (WAJIB, Jers sangat memperhatikan ini)
@@ -95,9 +84,9 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 ## Alur satu sesi
 
 1. **Cari pekerjaan.** `ArtifactData` action `query`, collection `data/users/me`, where `jenis == "studio"`.
-   Pilih SATU pesanan tertua dengan status `antre`, `render`, atau `revisi`.
+   Pilih SATU pesanan tertua dengan status `antre`, `render`, atau `revisi` yang brand-nya BUKAN `nua`.
    Juga anggap pesanan berstatus `proses` yang `diperbarui` lebih dari 90 menit lalu sebagai macet: kerjakan ulang tahapnya.
-   Kalau tidak ada pekerjaan: selesai, cukup jawab "Tidak ada pesanan studio." (jangan mengirim notifikasi).
+   Kalau tidak ada pekerjaan (pesanan `nua` tidak dihitung): selesai, cukup jawab "Tidak ada pesanan studio." (jangan mengirim notifikasi).
 2. **Kunci.** `update` pesanan: `status: "proses"`, `tahap: "konsep"|"render"|"revisi"`, `diperbarui: <ISO>`, `log: "..."`.
 3. Kerjakan tahapnya (di bawah).
 4. Tulis hasil, lalu kirim notifikasi push singkat ke Jers bila alatnya tersedia (contoh: "Bagas: 2 konsep video siap dipilih").
