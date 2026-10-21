@@ -116,3 +116,45 @@ Sama dengan `STUDIO.md`, dengan perbedaan:
 `examples/nuancier_motion/` (video uji: sistem visual + sinkron suara + audio sintetis).
 Kamu boleh `pip install --break-system-packages` pustaka lain bila perlu. **Jangan mengubah isi repo dari sesi studio terjadwal**;
 file kerja di direktori sementara.
+
+---------------------------------------------------------------------------------------------------
+## Pesanan portofolio (`sumber: "porto"`)
+
+Jers mengunggah PDF portofolio satu proyek; **Herman** sudah membacanya dan menulis `naskah`, `caption`, `ringkas_proyek`,
+`fakta` (dengan nomor halaman), `halaman_kunci`, dan `catatan_herman`. Pesanan masuk ke antreanmu dengan status `antre`
+dan `konsepWajib: ["motion","grafis"]`. Panduan Herman: `HERMAN_PORTOFOLIO.md` (bacalah untuk konteks).
+
+**Bahan:** PDF aslinya di `pdf.id`: unduh dengan alat `Artifact` (`action: "read"`, `url` Kantor Agent, `path: "<pdf.id>"`).
+Ambil gambar karya dengan `pdftoppm -r 150 -png` (halaman utuh, lalu crop) atau `pdfimages -png` (gambar tertanam).
+Ini karya NYATA Nuancier, jadi aturan "tidak ada logo fiktif" berlaku terbalik di sini:
+- Tampilkan logo, mockup, dan nama klien **persis seperti di PDF**. Tidak ada label "FIKTIF".
+- Jangan mengubah karya (warna, bentuk, proporsi, tipografi logo); hanya boleh crop, skala, dan menaruhnya di atas latar bersih.
+  Beri ruang bebas minimal 1,5x tinggi logo di sekelilingnya; jangan menutup logo dengan teks atau garis.
+- Jangan menambah klaim, angka, testimoni, atau cerita yang tidak ada di `naskah`/`fakta`.
+- Jangan menampilkan telepon, email, alamat, atau data pribadi dari PDF.
+- Kualitas gambar: kalau halaman PDF beresolusi rendah sehingga buram pada ukuran slide, gunakan lebih kecil/di dalam bingkai dan
+  tulis di `log` untuk Jers.
+
+**Konsep (tahap KONSEP): tepat dua, beda format, bukan dua gaya video.** Tambahkan field `jenis` pada tiap objek konsep:
+- Konsep **A** `jenis: "motion"`: video 1080x1920, 20–60 detik, dengan VO (suara Nuancier, lihat bagian Suara). Frame kunci 9:16.
+- Konsep **B** `jenis: "grafis"`: carousel Instagram 1080x1350 (4:5), 5–8 slide (maks 10). Slide 1 = hook, slide terakhir = ajakan + wordmark "Nuancier Studio".
+  Frame kunci = 4 slide pertama yang benar-benar kamu render (JPG 540x675).
+Keduanya berwajah Nuancier (putih, Kobalt/Sinabar/Oker, Inter) tetapi **bintangnya karya klien**; jangan mengalahkan logo dengan dekorasi.
+Kerangka dua konsep harus berbeda metafora dan alurnya (jangan hanya memotong video jadi slide).
+
+**RENDER konsep motion:** seperti biasa (hasil di `video`, `status: "review"`).
+
+**RENDER konsep grafis:**
+1. Render semua slide PNG 1080x1350. `Layout.check()` nol masalah di setiap slide dan area aman: tidak ada teks atau logo di 60 px tepi;
+   teks isi ≥ 34 px; judul ≥ 64 px; kata yatim dilarang. Lihat SEMUA slide satu per satu (Read), perbaiki, ulangi (maks 4 putaran).
+2. Pratinjau: simpan tiap slide JPG 1080x1350 kualitas 85 dan unggah sebagai aset Kantor Agent (`Artifact`, `asset: true`, `file_paths`) →
+   `slides: [url, ...]` (urutan slide).
+3. Instagram: untuk tiap slide panggil Cloudinary `sign-upload` (`{"folder":"bagas-studio","public_id":"<id pesanan>-s<nomor>-v<versi>"}`),
+   lalu `python3 toolkit/studio.py upload slide.jpg sign.json image` → `slides_cloud: [url, ...]` dengan urutan sama.
+4. `update` pesanan: `slides`, `slides_cloud`, `video: null`, `status: "review"`, `log`. Tambahkan gaya ke `gaya_riwayat_nua`.
+
+**REVISI:** ikuti `catatan` dan `lampiran`. Untuk grafis, perbarui hanya slide yang diminta, jangan mengubah urutan tanpa diminta,
+lalu ulangi langkah pratinjau dan Cloudinary (id baru, versi naik).
+
+**Jadwal tayang bukan urusanmu:** Jers menentukan tanggal dan jam sendiri di halaman, lalu aplikasi menjadwalkan. Jangan menulis `jam`.
+Notifikasi: "Sonya: pilihan portofolio <topik> siap (1 motion, 1 grafis)" setelah konsep, dan "Sonya: <motion/grafis> <topik> siap direview" setelah render.
