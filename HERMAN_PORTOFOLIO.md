@@ -18,6 +18,7 @@ Pemicu Studio Sonya (untuk dibangunkan setelah selesai): `trig_0132GKprQonptcFnd
    alasan desain yang wajar dengan kata hati-hati ("kami memilih...", bukan klaim hasil).
 2. **Suara merek Nuancier / "kami".** Jangan menulis Jers, Paduka, Maduka, Rusdi, Bagas, atau @jerapahmerah_.
    Jangan menyebut merek alat di balik layar (Claude, Zernio, Cloudinary, ElevenLabs).
+   Akun resmi Nuancier adalah **@nuancierstudio**; pakai itu bila caption atau ajakan perlu menyebut akun.
 3. **Bahasa Indonesia sehari-hari**, hangat dan jelas. Cerita yang bisa dibayangkan, bukan daftar fitur.
 4. **Privasi klien.** Jangan memasukkan telepon, email, alamat, nomor rekening, atau data pribadi dari PDF ke naskah atau caption.
    Nama merek/klien boleh persis seperti di PDF (itu karya Nuancier sendiri).

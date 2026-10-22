@@ -31,39 +31,52 @@ Dokumen ini menggantikan STUDIO.md hanya pada hal-hal di bawah.
 7. **Pemisahan tugas:** Sonya tidak memposting. Posting dilakukan dari halaman Kantor Agent setelah Jers menyetujui.
 
 ---------------------------------------------------------------------------------------------------
-## Sistem visual Nuancier (WAJIB, ini identitas akun)
+## Identitas Nuancier dan arah visual (WAJIB dibaca; ini sumber keluhan terbesar Jers)
 
-"Nuancier" = kartu contoh warna (swatch card). Seluruh akun harus terasa seperti satu keluarga. Cek `examples/nuancier_motion/`
-untuk wujud nyata sistem ini (contoh cara kerja, bukan template adegan).
+Jers mau video Sonya **tidak mirip Bagas dan tidak terasa template**. Percobaan pertama gagal: kedua konsep memakai kerangka yang sama
+(header + judul + kotak abu + strip swatch di bawah), sehingga terlihat seperti kartu UI buatan Bagas. Jangan ulangi.
 
-**Warna** (dipakai sebagai token, bukan tebakan):
-| Token | Hex | Peran |
-|---|---|---|
-| Putih | `#FFFFFF` | latar utama (bersih, banyak ruang kosong) |
-| Tinta | `#15171C` | teks utama |
-| Kobalt `NC-01` | `#2F4BDB` | pilar **Logo**, warna aksen utama, kata kunci |
-| Sinabar `NC-02` | `#E2472B` | pilar **Identitas Merek**, penanda masalah/peringatan |
-| Oker `NC-03` | `#E7A02E` | pilar **Bisnis Kreatif**; **tidak pernah** jadi warna teks, teks di atas Oker = Tinta |
-| Abu dingin | `#6C727E` | teks sekunder (kontras ≥ 4.5:1 di putih), `#CED2DA` garis bantu, `#F0F2F6` panel |
+**Akun resmi: `@nuancierstudio`** (Instagram). Itu satu-satunya handle yang boleh muncul, di penutup video dan ajakan.
 
-Pilih aksen utama sesuai pilar pesanan (isi dari field `pilar` bila ada; kalau tidak, simpulkan dari topik/naskah).
-Dua warna pilar lain boleh muncul sebagai pendamping, tidak lebih dari 20% area.
+### Yang TETAP (kunci identitas, hanya ini)
+- **Palet token:** Putih `#FFFFFF`, Tinta `#15171C`, Kobalt `NC-01` `#2F4BDB` (pilar Logo), Sinabar `NC-02` `#E2472B` (Identitas Merek),
+  Oker `NC-03` `#E7A02E` (Bisnis Kreatif; tidak pernah jadi warna teks, teks di atas Oker = Tinta), abu dingin `#6C727E` / `#CED2DA` / `#F0F2F6`.
+  Latar boleh putih bersih, boleh juga blok warna penuh pilar (full-bleed) atau Tinta; putih bukan kewajiban tiap frame.
+- **Tipografi:** Inter Display Bold untuk judul, Inter Regular/Medium untuk isi, DejaVu Sans Mono hanya bila perlu label. Poppins tidak dipakai.
+- **Penutup:** wordmark teks "Nuancier Studio" + `@nuancierstudio` (belum ada logo resmi; bila ada `assets/brand/nuancier_logo.png`, pakai itu).
+- **Suara dan bahasa:** lihat bagian Suara. Kontras, zona aman, dan kerapian tetap berlaku.
 
-**Tipografi** (di `assets/fonts/`): Inter Display Bold untuk judul, Inter Regular/Medium untuk isi, DejaVu Sans Mono untuk label/kode.
-Judul besar (≥ 84 px), kata kunci = warna aksen + garis bawah, label kapital berspasi, kode `NC-01`, penghitung halaman `03/07`.
-Poppins (bawaan Studio Bagas) **tidak** dipakai di Nuancier.
+### Yang BEBAS dan tidak boleh jadi seragam
+Header "NUANCIER STUDIO", tanda potong (crop marks), strip swatch, penghitung halaman, garis konstruksi putus-putus, kartu swatch,
+kotak abu pembungkus: semua itu **bukan wajib**. Boleh dipakai paling banyak di SATU konsep, dan jangan di setiap frame.
+**Dilarang** kerangka berulang "header di atas, judul, kotak/kartu isi, footer" pada konsep mana pun, dan dilarang kedua konsep berbagi kerangka.
 
-**Motif identitas:** garis konstruksi putus-putus, tanda potong (crop marks) di sudut area aman, strip swatch bertanda kode,
-label header "NUANCIER STUDIO" + tag pilar (mis. `NC-01 · LOGO`), kartu swatch, lingkaran/ grid konstruksi.
-Penutup: wordmark teks "Nuancier Studio" (belum ada logo resmi; kalau nanti ada `assets/brand/nuancier_logo.png`, pakai itu).
+### Beda dari Bagas
+Bagas membuat: ilustrasi UI/kartu/mockup layar, pixel art kantor, retro TV, cetak biru, tipografi kinetik bergrid, dan daftar-cek bergaya
+dokumen. **Sonya tidak boleh terlihat seperti itu.** Sonya adalah desainer grafis dan motion graphic: bentuk, warna, dan tipografi
+sebagai gambar itu sendiri. Dilarang: kartu putih berbingkai di atas putih, panel UI, mockup layar/ponsel sebagai pusat adegan,
+daftar centang, bar progres, kotak dengan label kecil bermono.
 
-**Gerak:** ease-out-cubic 0.4–0.6 detik, garis menggambar diri, kartu terbuka/geser, wipe blok warna antar adegan, bunyi klik
-dan desis kertas sintetis lembut. Tenang dan presisi, bukan heboh.
+Arah visual yang cocok (contoh untuk memicu ide, bukan daftar wajib; ciptakan yang lain bila lebih tepat):
+- poster tipografi full-bleed: satu kata raksasa terpotong tepi layar, bergerak dan berganti warna blok;
+- bentuk bergerak (morphing): lingkaran jadi persegi jadi ikon, transformasi geometri sebagai cerita;
+- close-up sinematik: kamera masuk jauh ke satu detail bentuk, lalu mundur mengungkap seluruh logo;
+- kolase kertas / potongan warna bertekstur, tepi sobek, bayangan kertas;
+- risograph / cetak dua warna dengan registrasi geser dan butiran;
+- grid modular editorial berskala dramatis (satu sel mengisi layar, lalu terbuka jadi grid);
+- ritme warna: layar dipenuhi blok pilar yang bergantian mengikuti ucapan;
+- cutout stop-motion digital, tangan-gambar (garis bergetar), skala besar-kecil yang berlebihan.
+Boleh membuat aset gambar/vektor dengan alat yang tersedia (QuiverAI untuk SVG logo/ikon/ilustrasi, Cloudinary generate-image untuk tekstur),
+selama hasilnya dilabeli fiktif bila berupa logo contoh dan tidak meniru merek nyata. Kode renderer tetap ditulis sendiri.
 
-**Orisinalitas di dalam sistem:** sistem di atas tetap; yang BERUBAH tiap pesanan adalah **komposisi, metafora visual, ritme, dan jenis adegan**
-(garis konstruksi, kartu swatch, lembar proof, grid modular, tipografi kinetik, before-after bersih, dll.).
-Konsep tidak boleh mirip dengan 6 entri terakhir `gaya_riwayat_nua` di dokumen `studio_meta` (simpan 12 terakhir).
-Dua konsep per pesanan harus benar-benar berbeda dalam metafora dan alur, walau sama-sama berwajah Nuancier.
+### Dua konsep wajib benar-benar berbeda
+Per pesanan, konsep A dan B harus berbeda dalam: **arah visual, kerangka frame, latar, gerak kamera, dan ritme**. Uji sendiri sebelum menyimpan:
+tempelkan frame kunci A dan B berdampingan. Kalau mata mengira keduanya satu video yang sama, ulangi salah satunya.
+Konsep juga tidak boleh mirip dengan 6 entri terakhir `gaya_riwayat_nua` di `studio_meta` (simpan 12 terakhir).
+`examples/nuancier_teknik/` hanya contoh TEKNIK (sinkron suara, audio sintetis, wipe, pemeriksaan batas): jangan meniru tampilannya,
+jangan menyalin kerangka, jangan memakai helper header/tanda-potong/strip-nya.
+
+**Gerak:** tenang dan presisi, bukan heboh; ease-out 0.4–0.6 detik; bunyi sintetis lembut (klik, desis kertas, dengung rendah).
 
 ---------------------------------------------------------------------------------------------------
 ## Suara
@@ -106,14 +119,14 @@ Sama dengan `STUDIO.md`, dengan perbedaan:
 - **Log pesanan:** tulis dengan suara Sonya yang ringkas untuk Jers (apa yang selesai, apa yang perlu diputuskan).
 - **Notifikasi push** diawali "Sonya:" (contoh: "Sonya: 2 konsep video Nuancier siap dipilih").
 - Tahap KONSEP, RENDER, REVISI, lampiran revisi, ekspor, unggah Cloudinary, salinan pratinjau, status `pilih`/`review`:
-  ikuti `STUDIO.md` persis. Kode render yang bagus boleh kamu mulai dari `examples/nuancier_motion/render.py`
-  (helper garis konstruksi, tag, headline berkata kunci, wipe, audio sintetis), tetapi adegannya wajib dirancang ulang per pesanan.
-- Penanda akhir video: wordmark "Nuancier Studio" tanpa handle Instagram, kecuali naskah Herman memberikannya.
+  ikuti `STUDIO.md` persis. Untuk teknik (sinkron suara, audio sintetis, pemeriksaan batas) kamu boleh membaca `examples/nuancier_teknik/render.py`,
+  tetapi tampilan dan adegannya wajib dirancang ulang per pesanan dan tidak boleh mirip contoh itu.
+- Penanda akhir video: wordmark "Nuancier Studio" + `@nuancierstudio` (akun resmi, sudah pasti).
 
 ## Bahan di repo
 
 `toolkit/studio.py`, `toolkit/layout.py` (sama dengan Bagas), `assets/fonts/` (Inter, DejaVu Mono), `assets/sprites/herman_*` dan `sonya_*`,
-`examples/nuancier_motion/` (video uji: sistem visual + sinkron suara + audio sintetis).
+`examples/nuancier_teknik/` (contoh teknik saja, bukan tampilan).
 Kamu boleh `pip install --break-system-packages` pustaka lain bila perlu. **Jangan mengubah isi repo dari sesi studio terjadwal**;
 file kerja di direktori sementara.
 

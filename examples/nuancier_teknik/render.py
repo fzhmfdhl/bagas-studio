@@ -1,7 +1,7 @@
-"""Contoh Studio Sonya: video uji "logo 32 piksel" dalam sistem visual Nuancier (putih, Kobalt/Sinabar/Oker).
-Contoh cara kerja, BUKAN template: tiap pesanan harus punya komposisi dan adegan sendiri.
-Jalankan: buat vo/ dengan `python3 toolkit/studio.py vo-split vo.mp3 examples/nuancier_motion/lines.json examples/nuancier_motion/vo`,
-lalu `python3 examples/nuancier_motion/render.py full`.
+"""Contoh TEKNIK Studio Sonya (sinkron suara per baris, audio sintetis, wipe, pemeriksaan zona aman).
+BUKAN contoh tampilan: jangan meniru kerangka header/judul/kartu/strip ini. Tiap pesanan harus punya arah visual sendiri.
+Jalankan: buat vo/ dengan `python3 toolkit/studio.py vo-split vo.mp3 examples/nuancier_teknik/lines.json examples/nuancier_teknik/vo`,
+lalu `python3 examples/nuancier_teknik/render.py full`.
 """
 import sys, json, math, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
