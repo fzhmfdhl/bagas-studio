@@ -67,11 +67,14 @@ def lab(d,y,t,a,cx=CX):
 def rule(d,y,a,w=96,cx=CX,col=ACC):
     d.rectangle([cx-w//2,y,cx+w//2,y+3],fill=A(col,a))
 
-def c_title(p,eyebrow,title,sub):
+def c_title(p,title,sub,brand='JERSTALK'):
+    """Kartu pembuka. Pertanyaan pertama Nabila terdengar di atas kartu ini (lihat rakit_episode.py)."""
     im=paper();L=Image.new('RGBA',(W,H),(0,0,0,0));d=ImageDraw.Draw(L)
     a0=ease(p*4)
-    icon(L,'mic_ink',CX,560,150,a0);d=ImageDraw.Draw(L)
-    lab(d,688,eyebrow,a0);rule(d,752,a0)
+    icon(L,'mic_ink',CX,544,150,a0);d=ImageDraw.Draw(L)
+    fb=F('Bold',52);wb,_=tw(d,brand,fb)
+    d.text((CX-wb//2,668),brand,font=fb,fill=A(INK,a0))
+    rule(d,752,a0)
     f=F('Bold',92);lines=wrap(d,title,f,660);y=824
     for i2,l in enumerate(lines):
         a=ease((p-.1-i2*.09)*4.5)

@@ -10,8 +10,9 @@ QL=['Banyak yang nanya, AI ini bisa bantu apa sih buat usaha kecil?','Kenapa har
 AL=['Paling cepat kelihatan hasilnya di balas chat pelanggan.','Karena telat balas itu diam-diam makan omzet, dan jarang ada yang sadar.','Kumpulkan chat lama kamu, kasih ke AI, minta dia bikin draft balasan.','Nggak, karena contohnya dari chat kamu sendiri. Nada bicaranya tetap kamu.','Baca, benerin sedikit, kirim. Itu saja.','Tulis usaha kamu di komentar, nanti aku bedah satu.']
 QS=voice_segments('q.wav',QL);AS=voice_segments('a.wav',AL)
 
-OPEN=2.6;GAP=.30;JHEAD=.70;TAIL=2.2
-cues=[];t=OPEN
+# Pertanyaan pertama Nabila diputar DI ATAS kartu judul (cold open), bukan di shot Nabila.
+LEAD=.45;GAP=.30;JHEAD=.70;TAIL=2.2
+cues=[];t=LEAD
 for i in range(6):
     q=QS[i]['audio'];a=AS[i]['audio']
     dq=len(q)/SR;da=len(a)/SR
@@ -49,8 +50,9 @@ def at(t):
 mot=0
 for fi in range(N):
     t=fi/FPS
-    if t<OPEN:
-        im=c_title(min(1,t/(OPEN*.72)),'PODCAST PIXEL','AI buat usaha kecil','bisnis & AI  \u00b7  EP 00');mot+=1
+    TOPEN=cues[0]['b']+GAP/2            # kartu judul menutupi seluruh pertanyaan pertama
+    if t<TOPEN:
+        im=c_title(min(1,t/max(.6,TOPEN*.55)),'AI buat usaha kecil','bisnis & AI  \u00b7  EP 00');mot+=1
     else:
         c=at(t)
         if c is None or (c['w']=='J' and t>cues[-1]['b']):
