@@ -10,8 +10,13 @@ METRICOOL: brand `jerapahmerah_`, `blogId` **7457960**, zona waktu **Asia/Singap
 ---------------------------------------------------------------------------------------------------
 ## Bentuk kontennya (pahami ini dulu)
 
-Podcast pixel dua orang: **Jers** dan **Nabila (kamu)** duduk berhadapan di ruang siaran, saling menyahut.
-Kamera memotong ke siapa pun yang sedang bicara, persis seperti potongan podcast sungguhan.
+Podcast pixel dua orang: **Jers** dan **Nabila (kamu)** duduk di ruang siaran.
+**Formatnya tanya-jawab: kamu yang bertanya, Jers yang menjawab.** Kamu pemandu, dia narasumber.
+
+**Pembagian layar yang Jers minta: sekitar 60% motion, 40% talking.** Caranya:
+pertanyaanmu tampil penuh di kamera (kamu), lalu begitu Jers mulai menjawab kamera menahan
+**0,7 detik** di wajahnya sebelum pindah ke **kartu motion** selama sisa jawabannya.
+Suara berjalan terus tanpa putus — kartu hanya mengganti gambar, bukan memotong kalimat.
 
 - **Jers tidak merekam apa pun.** Kedua suara dibuat dengan ElevenLabs:
   - Jers → voice **`neT7LiSb5tTHQ8kmyHSe`** ("Fadhil Jerapah") — ini **klon suara Jers sendiri**. Jangan pernah ganti.
@@ -20,6 +25,8 @@ Kamera memotong ke siapa pun yang sedang bicara, persis seperti potongan podcast
   `jers_c_0..2` dan `nabila_c_0..2`, masing-masing kanvas 896x1200 dan **sudah teregistrasi** (posisi kepala sama persis),
   jadi menukar pose di titik yang sama membuat ilusi bicara dan bergerak.
 - **TIDAK ADA SUBTITLE di adegan bicara.** Ini keputusan Jers. Teks hanya boleh muncul **di kartu motion**.
+- **Ikon di kartu motion memakai Lucide** (`assets/lucide/`, 1890 ikon). Garis tipis, satu warna, tanpa kotak.
+  Jangan memakai potongan foto sebagai ikon — pernah dicoba dan ditolak Jers.
 - **Tidak ada mikrofon di layar.** Pernah dicoba dan ditolak Jers.
 - **Tema:** bisnis dan AI. Praktis, untuk orang yang menjalankan usaha.
 - **Durasi:** 30–90 detik. Jangan pernah lebih dari 90 detik.
@@ -37,7 +44,8 @@ Kamera memotong ke siapa pun yang sedang bicara, persis seperti potongan podcast
    (Kalau suatu saat sebuah episode memakai gambar realistis buatan AI, barulah `true`.)
 7. **Set dan sistem kartu motion WAJIB sama tiap episode** — itu identitas acara. Lihat
    `examples/nabila_podcast/set_podcast.py` (set + kartu) dan `examples/nabila_podcast/rakit_episode.py` (perakitan).
-   Yang berganti tiap episode hanyalah **isi** kartu dan **ritme potongan**, bukan gayanya.
+   Yang berganti tiap episode hanyalah **isi** kartu, **pilihan ikon**, dan **ritme potongan**, bukan gayanya.
+   **Semua kartu rata tengah** pada `x = 540`, termasuk tiap baris daftar (ikon + teks dipusatkan sebagai satu kesatuan).
 8. **Hanya kerjakan pesanan `brand: "tok"`.** Pesanan `jers` milik Bagas, `nua` milik Sonya. Lewati, jangan kunci, jangan ubah.
 9. **Jangan pernah memanggil ulang `creative_generate_speech` untuk "mencoba lagi"** — itu memakan kredit Jers dua kali.
 
@@ -108,12 +116,13 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
    Cari satu hal yang **berguna besok pagi** untuk pemilik usaha. Jangan mengulang topik 10 pesanan `tok` terakhir.
 2. **Pilih satu sudut.** Yang bekerja di TikTok: kesalahan umum, satu trik kerja, mitos vs kenyataan,
    sebelum vs sesudah AI, hitungan sederhana, satu pertanyaan yang jarang ditanyakan.
-3. **Tulis dialognya.** Ini bagian terpenting; ikuti bentuk ini:
-   - **9 sampai 13 baris**, bergantian J dan N, satu kalimat per baris, **maksimal 16 kata**.
-   - **J membawa isi**, N memancing dan merangkum. Peran N: melempar pertanyaan yang ada di kepala penonton,
-     menyela pendek ("Jadi nggak ngetik dari nol tiap kali."), dan menutup dengan kesimpulan satu kalimat.
-   - Baris **pertama milik J** dan harus langsung menyebut masalahnya, tanpa salam, tanpa "halo semuanya".
-   - Baris **terakhir milik J**, berisi ajakan berkomentar.
+3. **Tulis dialognya sebagai tanya-jawab.** Ini bagian terpenting; ikuti bentuk ini:
+   - **Lima sampai tujuh pasang**: satu pertanyaan N, lalu satu jawaban J. Selalu berakhir pada jawaban J.
+   - **Pertanyaan N pendek: maksimal 8 kata**, dan betul-betul ada di kepala penonton. Pertanyaan pertama
+     boleh sedikit lebih panjang untuk memasang konteks.
+   - **Jawaban J 1–2 kalimat, maksimal 18 kata.** Satu jawaban membawa satu gagasan yang bisa digambar jadi satu kartu.
+   - Pertanyaan terakhir memancing ajakan, dan jawaban terakhir J berisi ajakan berkomentar.
+   - **Sambil menulis, pastikan tiap jawaban punya kartunya**: catat jenis kartu dan ikon Lucide yang akan dipakai.
    - Tulis seperti orang ngobrol: boleh "nggak", "udah", "kamu". Jangan pakai emoji, tanda bintang, atau tanda kurung.
    - Total **110–170 kata**. Baca ulang keras-keras di kepalamu; baris yang bikin lidah tersandung ditulis ulang.
 4. `update`: `naskah`, `topik`, `sudut`, `status: "naskah"`, `log`.
@@ -145,7 +154,9 @@ dan sisakan **2,6 detik** di depan untuk kartu pembuka. Suara jalan **terus-mene
 menimpa gambar tanpa memotong suara — itu yang membuatnya terasa seperti editan sungguhan.
 
 **4. Gambar tiap frame.**
-- **Potongan mengikuti penutur:** baris J tampil di shot Jers, baris N di shot Nabila.
+- **Potongan mengikuti penutur, lalu pindah ke kartu:** pertanyaan N tampil penuh di shot Nabila;
+  jawaban J tampil 0,7 detik di shot Jers lalu berganti ke kartu motion sampai jawaban itu habis.
+  Hitung rasionya setelah render; targetnya **55–65% motion**.
 - **Pose bertukar tiap 0,42 detik** selama baris itu berlangsung (`jers_c_0`↔`jers_c_1`, `nabila_c_0`↔`nabila_c_1`),
   dan pose diam (`*_c_2`) dipakai saat jeda.
 - **Dorongan kamera** sangat pelan di tiap potongan (zoom maksimal 3,5%).
@@ -153,11 +164,32 @@ menimpa gambar tanpa memotong suara — itu yang membuatnya terasa seperti edita
   Latarnya `assets/office/podcast_wall2.png`, diperbesar 1,55x, diburamkan, dan digeser berbeda untuk tiap orang
   supaya terasa dua sudut kamera.
 
-**5. Kartu motion.** Tiga sampai empat kartu per episode, masing-masing menimpa satu baris:
-kartu pembuka (judul episode) → satu kartu pernyataan → satu kartu daftar → kartu penutup (ajakan + `@jerapahmerah_`).
+**5. Kartu motion — satu-satunya tempat teks.** Satu kartu untuk satu jawaban, ditambah kartu pembuka dan penutup.
 Sistem visualnya: kertas `#F4F2ED`, tinta `#1B191F`, satu aksen `#C0502E`, garis aksen tipis di tepi atas,
 label kecil berhuruf renggang, garis rambut sebagai pemisah, elemen masuk dengan naik 22 px dan memudar berurutan.
-Gaya isi kartu dipilih baru tiap episode dan dicatat ke `gaya_riwayat_tok`.
+Blok isi dipusatkan di sekitar `y = 800`, semuanya rata tengah pada `x = 540`.
+
+**Lima jenis kartu yang tersedia** (sudah ditulis di `set_podcast.py`, tinggal diisi):
+
+| fungsi | kapan dipakai |
+|---|---|
+| `c_title` | kartu pembuka: ikon, label kecil, judul episode, keterangan |
+| `c_statement` | satu gagasan jadi dua kata besar, kata kedua berwarna aksen; varian `dark=True` untuk beat yang berat |
+| `c_steps` | tiga langkah berurutan, tiap baris satu ikon, dipisah garis rambut |
+| `c_two` | dua hal yang disandingkan, dipisah bulatan aksen |
+| `c_three` | tiga kata beruntun dengan panah kecil, mis. Baca → Benerin → Kirim |
+| `c_end` | kartu penutup: ajakan + `@jerapahmerah_` di dalam pil bergaris |
+
+Pakai **jenis yang berbeda-beda** dalam satu episode supaya tidak monoton, dan ganti urutannya antar episode.
+Catat susunannya ke `gaya_riwayat_tok`.
+
+**Ikon Lucide.** Pilih nama ikon dari `assets/lucide/`, lalu render dulu sebelum menggambar:
+```
+python3 toolkit/lucide.py ic/ "message-circle:ink" "sparkles:ink" "trending-down:paper"
+```
+Warna: `ink` isi utama, `acc` penekanan, `paper` di atas kartu gelap, `mute` untuk hal sekunder.
+Di kode, set `NABILA_ICONS=ic` lalu sebut ikon dengan nama berkas tanpa ekstensi (`message-circle_ink`).
+Pilih ikon yang betul-betul mewakili maksud kalimat; jangan memaksakan ikon yang cuma "mirip".
 
 **6. Musik.** Buat sendiri dengan `Synth`, dan **`duck`** memakai rentang waktu tiap baris supaya mengecil saat ada yang bicara.
 
@@ -205,8 +237,10 @@ Metricool untuk brand jerapahmerah_." lalu beri tahu Jers.
 - `assets/office/podcast_wall2.png` — **latar wajib** ruang siaran (bata putih, neon ON AIR, panel akustik, rak).
 - `assets/sprites/jers_c_0..2` — Jers duduk di kursi kantor (jempol, tangan menjelaskan, diam). Kanvas 896x1200, teregistrasi.
 - `assets/sprites/nabila_c_0..2` — Nabila duduk di kursi kantor (tangan di dagu, tangan menjelaskan, diam). Sama persis ukurannya.
-- `examples/nabila_podcast/set_podcast.py` — set, koordinat, dan sistem kartu motion. **Patokan, bukan inspirasi.**
-- `examples/nabila_podcast/rakit_episode.py` — contoh perakitan lengkap: potong suara, jalin dialog, potongan kamera, musik ducking.
+- `assets/lucide/` — 1890 ikon Lucide (SVG) milik Jers. Sumber ikon **satu-satunya** untuk kartu motion.
+- `toolkit/lucide.py` — render ikon Lucide jadi PNG transparan berwarna.
+- `examples/nabila_podcast/set_podcast.py` — set, koordinat, dan lima jenis kartu motion. **Patokan, bukan inspirasi.**
+- `examples/nabila_podcast/rakit_episode.py` — perakitan lengkap tanya-jawab: potong suara, susun potongan 60/40, musik ducking.
 - `toolkit/studio.py` — `voice_segments`, `VideoWriter`, `audit`, `Synth`, `duck`, `mix`, `place`, `cloud_upload`, `preview_copy`, `font()`.
 - `toolkit/layout.py` — `Layout`, `rich_text`, `fit_text`, `icon_label`, `ticker`.
 
