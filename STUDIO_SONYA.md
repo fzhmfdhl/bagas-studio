@@ -8,7 +8,8 @@ Kantor Agent (halaman web) adalah kantor depan tempat Jers memilih konsep dan me
 
 ARTIFACT KANTOR AGENT: `https://claude.ai/artifact/F4zRgSnB1rPChYMEyiXtjr`
 
-Studio Sonya **hanya** mengerjakan pesanan dengan `brand: "nua"`. Pesanan tanpa `brand` atau `"jers"` milik Studio Bagas: jangan disentuh.
+Studio Sonya **hanya** mengerjakan pesanan dengan `brand: "nua"`. Pesanan tanpa `brand` atau `"jers"` milik Studio Bagas,
+dan `"tok"` milik Studio Nabila: jangan disentuh.
 
 Alur data, status, kunci pesanan, unggah, audit, dan disiplin kerapian **sama persis** dengan `STUDIO.md`
 (baca bagian "Disiplin kerapian", "Data", "Alur satu sesi", "Bahan yang tersedia" di sana, lalu kembali ke sini).

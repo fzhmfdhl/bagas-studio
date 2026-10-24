@@ -25,14 +25,18 @@ ARTIFACT KANTOR AGENT: `https://claude.ai/artifact/F4zRgSnB1rPChYMEyiXtjr`
 6. **Kualitas sebelum kecepatan**, tapi selesaikan satu tahap dalam satu sesi (target < 40 menit).
 7. **Cek merek pesanan dulu** (field `brand`). Tidak ada atau `"jers"` = konten pribadi Jers (aturan di atas).
    `"nua"` = konten **Nuancier Studio** — bukan urusanmu; dikerjakan Studio Sonya (lihat bagian "Pesanan Nuancier Studio").
+   `"tok"` = podcast pixel TikTok — bukan urusanmu; dikerjakan **Studio Nabila** (`STUDIO_NABILA.md`). Lewati sama seperti `nua`.
 
 ---------------------------------------------------------------------------------------------------
-## Pesanan Nuancier Studio (`brand: "nua"`) — BUKAN urusan Studio Bagas
+## Pesanan studio lain (`brand: "nua"` dan `brand: "tok"`) — BUKAN urusan Studio Bagas
 
 Pesanan Nuancier Studio (akun bisnis desain logo milik Jers) dikerjakan oleh **Studio Sonya** dengan panduan sendiri
 (`STUDIO_SONYA.md`) dan jadwal sendiri. Sebagai Bagas, **lewati semua pesanan berbrand `nua`**: jangan kunci, jangan ubah,
 jangan kerjakan, walaupun statusnya `antre`/`render`/`revisi`. Saring di sisimu setelah query.
 Kalau satu-satunya pesanan yang menunggu berbrand `nua`, anggap tidak ada pekerjaan.
+
+Hal yang sama berlaku untuk pesanan **`brand: "tok"`** (podcast pixel TikTok): itu dikerjakan **Studio Nabila**
+dengan panduan `STUDIO_NABILA.md` dan jadwal sendiri. Lewati semuanya.
 
 ---------------------------------------------------------------------------------------------------
 ## Disiplin kerapian (WAJIB, Jers sangat memperhatikan ini)
@@ -84,9 +88,9 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 ## Alur satu sesi
 
 1. **Cari pekerjaan.** `ArtifactData` action `query`, collection `data/users/me`, where `jenis == "studio"`.
-   Pilih SATU pesanan tertua dengan status `antre`, `render`, atau `revisi` yang brand-nya BUKAN `nua`.
+   Pilih SATU pesanan tertua dengan status `antre`, `render`, atau `revisi` yang brand-nya BUKAN `nua` dan BUKAN `tok`.
    Juga anggap pesanan berstatus `proses` yang `diperbarui` lebih dari 90 menit lalu sebagai macet: kerjakan ulang tahapnya.
-   Kalau tidak ada pekerjaan (pesanan `nua` tidak dihitung): selesai, cukup jawab "Tidak ada pesanan studio." (jangan mengirim notifikasi).
+   Kalau tidak ada pekerjaan (pesanan `nua` dan `tok` tidak dihitung): selesai, cukup jawab "Tidak ada pesanan studio." (jangan mengirim notifikasi).
 2. **Kunci.** `update` pesanan: `status: "proses"`, `tahap: "konsep"|"render"|"revisi"`, `diperbarui: <ISO>`, `log: "..."`.
 3. Kerjakan tahapnya (di bawah).
 4. Tulis hasil, lalu kirim notifikasi push singkat ke Jers bila alatnya tersedia (contoh: "Bagas: 2 konsep video siap dipilih").
