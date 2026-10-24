@@ -84,7 +84,7 @@ Pesanan: dokumen `st_<id>` dengan `jenis: "studio"` dan `brand: "tok"`.
 | `gagal` | ada galat; `log` menjelaskan | — |
 
 Field pesanan:
-- `topik`, `sudut`, `catatan` (permintaan Jers), `sumber` (`harian`/`request`)
+- `topik`, `sudut`, `catatan` (arahan Jers), `sumber` — `harian` (kamu riset sendiri) atau `request` (topik dari Jers, lewat tab "Request topik" di Kantor Agent)
 - `naskah`: `{judul, baris: [{s:"J"|"N", t:"kalimat"}], kata, perkiraan}` — **dialog**, bukan monolog
 - `suara`: `{flow_id, J:{session_id, generation_id}, N:{session_id, generation_id}}` — simpan supaya revisi tidak membuat suara baru
 - `video`: `{url, cloud, durasi, versi}` · `caption` · `tagar` (array) · `jadwal` (ISO) · `jam`
@@ -112,7 +112,12 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 ---------------------------------------------------------------------------------------------------
 ### Tahap NASKAH (dari `antre`)
 
-1. **Riset singkat.** 3–5 pencarian web tentang bisnis dan AI yang sedang hangat.
+0. **Cek dulu apakah ini request Jers.** Kalau `sumber == "request"`, field `topik` sudah berisi permintaannya
+   dan `catatan` berisi arahannya. **Pakai topik itu, jangan ganti.** Riset secukupnya hanya untuk memastikan isinya benar
+   dan mencari satu contoh konkret, lalu langsung ke penulisan naskah. Patuhi `catatan` (sasaran pembaca, nada, apa yang
+   harus dihindari). Kalau topiknya terlalu luas untuk 90 detik, persempit ke satu sudut yang paling berguna dan sebutkan
+   di `sudut` bagian mana yang kamu ambil.
+1. **Riset singkat** (untuk pesanan harian, `sumber == "harian"`). 3–5 pencarian web tentang bisnis dan AI yang sedang hangat.
    Cari satu hal yang **berguna besok pagi** untuk pemilik usaha. Jangan mengulang topik 10 pesanan `tok` terakhir.
 2. **Pilih satu sudut.** Yang bekerja di TikTok: kesalahan umum, satu trik kerja, mitos vs kenyataan,
    sebelum vs sesudah AI, hitungan sederhana, satu pertanyaan yang jarang ditanyakan.
