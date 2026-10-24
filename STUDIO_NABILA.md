@@ -220,14 +220,17 @@ dan sebutkan di `log` bagaimana tiap lampiran ditangani. Tiap kesalahan baru jad
 Jadwalkan ke TikTok lewat Metricool:
 - alat `createScheduledPost`, `blogId: "7457960"`
 - `date` dan `info.publicationDate`: `{dateTime:"YYYY-MM-DDTHH:mm:ss", timezone:"Asia/Singapore"}` dari `jadwal`/`jam`.
-  Kalau kosong: `getBestTimeToPostByNetwork` untuk TikTok, atau default **19:30** hari itu (atau besok kalau sudah lewat).
+  Kalau kosong: panggil `getBestTimeToPostByNetwork` untuk TikTok dan pakai jam tertinggi hari itu.
+  Kalau alat itu gagal, default **18:00** hari itu (atau besok kalau sudah lewat).
+  Dari data akun Jers, tiga jam terbaik berturut-turut adalah **18.00, 10.00, dan 12.00 WITA**, paling kuat Rabu dan Kamis.
 - `info.providers`: `[{"network":"tiktok"}]` · `info.media`: `[<URL Cloudinary>]` · `info.text`: caption + tagar
 - `info.tiktokData`: `{"privacyOption":"PUBLIC_TO_EVERYONE","isAigc":false,"disableComment":false}`
 - `info.autoPublish`: `true`
 
 Lalu `update`: `status: "tayang"`, `log` berisi `plannerUrl`.
 
-**Kalau Metricool menolak karena TikTok belum tersambung**, jangan ulangi berkali-kali.
+TikTok brand `jerapahmerah_` **sudah tersambung** di Metricool (dicek 25 Okt 2026), jadi penjadwalan semestinya lolos.
+**Kalau suatu saat Metricool menolak karena TikTok terputus**, jangan ulangi berkali-kali.
 Set `status: "setuju"`, tulis di `log`: "TikTok belum tersambung di Metricool. Jers perlu menambahkannya di
 Metricool untuk brand jerapahmerah_." lalu beri tahu Jers.
 
