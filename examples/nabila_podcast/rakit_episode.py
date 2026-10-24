@@ -1,23 +1,24 @@
-# Contoh perakitan satu episode: potong suara per baris, jalin dialog, potongan kamera, musik ducking.
-import sys,os,math,numpy as np
+# Perakitan satu episode tanya-jawab (Nabila bertanya, Jers menjawab).
+# Target: sekitar 60% motion, 40% talking.
+import os,sys
 sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'set_podcast.py')).read().split("SEG=[('open'")[0])
-from toolkit.studio import voice_segments,save_wav,normalize,mix,place,duck,Synth as S,SR
-JL=['Chat pelanggan numpuk tiap malam, terus kamu balas pagi-pagi.','Nah itu. Telat balas itu diam-diam makan omzet.','Kumpulkan chat lama kamu, kasih ke AI, minta dia bikin draft balasan.','Betul. Kamu tinggal baca, benerin sedikit, kirim.','Kalau mau aku bedah punya kamu, tulis di komentar.']
-NL=['Dan pas kamu balas, orangnya udah beli di tempat lain.','Terus solusinya apa?','Jadi nggak ngetik dari nol tiap kali.','Dan nada bicaranya tetap kamu.']
-SJ=voice_segments('voJ.wav',JL);SN=voice_segments('voN.wav',NL)
-print('durasi J',[round(x['dur'],2) for x in SJ]);print('durasi N',[round(x['dur'],2) for x in SN])
-# urutan dialog: (siapa, indeks, kartu motion yang menimpa)
-ORDER=[('J',0,None),('N',0,None),('J',1,'A'),('N',1,None),('J',2,'B'),('N',2,None),('J',3,None),('N',3,None),('J',4,'E')]
-OPEN=2.6;GAP=.26
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'set_podcast.py')).read().split('# ---------- suara ----------')[0])
+
+# ---------- suara ----------
+from toolkit.studio import voice_segments
+QL=['Banyak yang nanya, AI ini bisa bantu apa sih buat usaha kecil?','Kenapa harus chat?','Terus caranya gimana?','Nggak takut nadanya jadi kaku?','Jadi kita tinggal apa?','Buat yang mau coba?']
+AL=['Paling cepat kelihatan hasilnya di balas chat pelanggan.','Karena telat balas itu diam-diam makan omzet, dan jarang ada yang sadar.','Kumpulkan chat lama kamu, kasih ke AI, minta dia bikin draft balasan.','Nggak, karena contohnya dari chat kamu sendiri. Nada bicaranya tetap kamu.','Baca, benerin sedikit, kirim. Itu saja.','Tulis usaha kamu di komentar, nanti aku bedah satu.']
+QS=voice_segments('q.wav',QL);AS=voice_segments('a.wav',AL)
+
+OPEN=2.6;GAP=.30;JHEAD=.70;TAIL=2.2
 cues=[];t=OPEN
-for who,i,kart in ORDER:
-    seg=(SJ if who=='J' else SN)[i]
-    cues.append({'who':who,'i':i,'a':t,'b':t+seg['dur'],'card':kart,'aud':seg['audio']})
-    t+=seg['dur']+GAP
-TAIL=1.9;DUR=t+TAIL
+for i in range(6):
+    q=QS[i]['audio'];a=AS[i]['audio']
+    dq=len(q)/SR;da=len(a)/SR
+    cues.append({'w':'N','a':t,'b':t+dq,'aud':q});t+=dq+GAP
+    cues.append({'w':'J','a':t,'b':t+da,'aud':a,'card':i});t+=da+GAP
+DUR=t-GAP+TAIL
 print('total',round(DUR,2))
-# ---- audio ----
 n=int(DUR*SR);voice=np.zeros(n)
 for c in cues:place(voice,c['aud'],c['a'])
 bed=np.zeros(n);perc=np.zeros(n);root=[48,48,53,46]
@@ -30,29 +31,41 @@ for i in range(int(DUR/.4)+1):
     if i%4==0:place(perc,S.kick(.10),tt)
     if i%2==1:place(perc,S.hat(.018),tt)
 music=duck(mix(bed,perc),[(c['a'],c['b']) for c in cues],depth=.42)
-save_wav('ep6.wav',normalize(mix(normalize(voice,.92),music),.93))
-# ---- video ----
-FPS=30;N=int(DUR*FPS);os.makedirs('f6',exist_ok=True)
+save_wav('ep7.wav',normalize(mix(normalize(voice,.92),music),.93))
+
+def card_for(i,p,bg):
+    if i==0:return c_statement(p,'MULAI DARI','Balas','chat','message-circle_ink')
+    if i==1:return c_statement(p,'YANG DIAM-DIAM TERJADI','Order','hilang','trending-down_paper',dark=True)
+    if i==2:return c_steps(p,'TIGA LANGKAH',[('inbox_ink','Kumpulkan chat lama'),('sparkles_ink','Minta AI buat draft'),('send_ink','Rapikan, lalu kirim')])
+    if i==3:return c_two(p,'KENAPA NADANYA TETAP',('message-circle_ink','Contoh dari chatmu'),('user-round_ink','Nada tetap kamu'))
+    if i==4:return c_three(p,'KAMU TINGGAL',['Baca','Benerin','Kirim'],['eye_ink','pencil_ink','send_ink'])
+    return c_end(p,bg)
+
+N=int(DUR*FPS);os.makedirs('f7',exist_ok=True)
 def at(t):
     for c in cues:
         if c['a']-GAP/2<=t<c['b']+GAP/2:return c
     return None
+mot=0
 for fi in range(N):
     t=fi/FPS
     if t<OPEN:
-        im=m_open(min(1,t/ (OPEN*.75)))
+        im=c_title(min(1,t/(OPEN*.72)),'PODCAST PIXEL','AI buat usaha kecil','bisnis & AI  \u00b7  EP 00');mot+=1
     else:
         c=at(t)
-        if c is None:
-            im=m_end(1.0) if t>cues[-1]['b'] else shot_j(t,2)
-        else:
+        if c is None or (c['w']=='J' and t>cues[-1]['b']):
+            im=c_end(1.0,shot_j(t,2));mot+=1
+        elif c['w']=='N':
             p=(t-c['a'])/max(.01,c['b']-c['a'])
-            if c['card']=='A' and p>.12:im=m_a(min(1,(p-.12)/.5))
-            elif c['card']=='B' and p>.10:im=m_b(min(1,(p-.10)/.55))
-            elif c['card']=='E' and p>.30:im=m_end(min(1,(p-.30)/.6))
+            k=int((t-c['a'])/.42)%2
+            im=zoomed(shot_n(t,k),1.0+p*.03,int(p*-8))
+        else:
+            e=t-c['a'];p=e/max(.01,c['b']-c['a'])
+            if e<JHEAD:
+                k=int(e/.42)%2
+                im=zoomed(shot_j(t,k),1.0+p*.035,int(p*-12))
             else:
-                k=int((t-c['a'])/.42)%2
-                if c['who']=='J':im=zoomed(shot_j(t,k),1.0+p*.035,int(p*-12))
-                else:im=zoomed(shot_n(t,k),1.0+p*.03,int(p*-8))
-    px(im,2).save('f6/%04d.png'%fi)
-print('frames',N)
+                q=(e-JHEAD)/max(.3,(c['b']-c['a'])-JHEAD)
+                im=card_for(c['card'],min(1,q*1.35),shot_j(t,2));mot+=1
+    px(im,2).save('f7/%04d.png'%fi)
+print('frames',N,'motion',round(100*mot/N),'%')

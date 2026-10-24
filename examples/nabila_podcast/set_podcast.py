@@ -1,16 +1,18 @@
-# Set podcast pixel Nabila: koordinat, potongan kamera, dan sistem kartu motion.
-# PATOKAN TETAP -- pakai apa adanya; yang berganti tiap episode hanya ISI kartu.
-import sys,os,math
+# Set podcast pixel Nabila: shot, potongan kamera, dan sistem kartu motion.
+# PATOKAN TETAP. Semua kartu dipusatkan di x=540 dan blok isinya di sekitar y=800.
+# Yang berganti tiap episode hanya ISI kartu dan pilihan ikon Lucide.
+import sys,os,math,numpy as np
 sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from PIL import Image,ImageDraw,ImageFilter,ImageEnhance
-from toolkit.studio import font
+from toolkit.studio import font,save_wav,normalize,mix,place,duck,Synth as S,SR,load_wav
 W,H,FPS=1080,1920,30
 R=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CX=540                      # titik tengah sejati
-PAPER=(244,242,237);INK=(27,25,31);MUTE=(146,142,138);ACC=(192,80,46)
+CX=540;PAPER=(244,242,237);INK=(27,25,31);MUTE=(146,142,138);ACC=(192,80,46);LINE=(214,210,204)
 def F(w,s):return font(w,s)
 def tw(d,t,f):
     b=d.textbbox((0,0),t,font=f);return b[2]-b[0],b[3]-b[1]
+def ctext(d,y,t,f,fill=PAPER,cx=CX):
+    w,_=tw(d,t,f);d.text((cx-w//2,y),t,font=f,fill=fill);return w
 def wrap(d,t,f,mw):
     o=[];c=''
     for wd in t.split():
@@ -29,121 +31,133 @@ def ease(x):return 1-(1-max(0.,min(1.,x)))**3
 WALL=Image.open(R+'/assets/office/podcast_wall2.png').convert('RGB')
 JC=[Image.open(R+'/assets/sprites/jers_c_%d.png'%i) for i in range(3)]
 NC=[Image.open(R+'/assets/sprites/nabila_c_%d.png'%i) for i in range(3)]
+import glob as _g
+ICDIR=os.environ.get('NABILA_ICONS','ic')   # folder PNG hasil `python3 toolkit/lucide.py ic/ "nama:warna" ...`
+IC={os.path.basename(p)[:-4]:Image.open(p).convert('RGBA') for p in _g.glob(os.path.join(ICDIR,'*.png'))}
 
-def room(zoom,ox,oy,blur=9,bright=1.0):
+def room(zoom,ox,oy,blur=9):
     w=int(W*zoom);h=int(WALL.height*w/WALL.width)
     b=WALL.resize((w,h),Image.NEAREST).filter(ImageFilter.GaussianBlur(blur))
-    if bright!=1.0:b=ImageEnhance.Brightness(b).enhance(bright)
     im=Image.new('RGB',(W,H),(234,232,228));im.paste(b,(ox,oy))
-    if oy+h<H:
-        im.paste(b.crop((0,h-30,w,h)).resize((w,H-(oy+h)),Image.NEAREST),(ox,oy+h))
+    if oy+h<H:im.paste(b.crop((0,h-30,w,h)).resize((w,H-(oy+h)),Image.NEAREST),(ox,oy+h))
     return im
-BG_J=room(1.55,-300,-170)
-BG_N=room(1.55,-560,-200)
-
+BG_J=room(1.55,-300,-170);BG_N=room(1.55,-560,-200)
 def shot_j(t,k):
-    im=BG_J.copy();j=grow(JC[k],2.2)
-    im.paste(j,(-257,70+int(math.sin(t*2.0)*4)),j);return im
+    im=BG_J.copy();j=grow(JC[k],2.2);im.paste(j,(-257,70+int(math.sin(t*2.0)*4)),j);return im
 def shot_n(t,k):
-    im=BG_N.copy();n=grow(NC[k],2.45)
-    nod=int(max(0,math.sin(t*2.4))*9)
-    im.paste(n,(-538,116+int(math.sin(t*1.8)*4)+nod),n);return im
+    im=BG_N.copy();n=grow(NC[k],2.9)
+    im.paste(n,(-336,-579+int(math.sin(t*1.8)*4)),n);return im
 def zoomed(im,z,oy=0):
     if z<=1.001 and not oy:return im
     nw,nh=int(W*z),int(H*z);im=im.resize((nw,nh),Image.NEAREST)
     return im.crop(((nw-W)//2,(nh-H)//2+oy,(nw-W)//2+W,(nh-H)//2+oy+H))
 
-# ---------------- kartu motion: bersih, di tengah, satu aksen ----------------
-def card(p,zoom=True):
-    im=Image.new('RGB',(W,H),PAPER)
-    d=ImageDraw.Draw(im)
-    d.rectangle([0,0,W,16],fill=ACC)
-    return im,ImageDraw.Draw(Image.new('RGBA',(W,H),(0,0,0,0)))
-def stack(im,items,p,top):
-    """items: (jenis, isi, font, warna, tinggi). Naik + pudar berurutan, rata tengah di CX."""
+# ---------- kartu motion ----------
+def paper():
+    im=Image.new('RGB',(W,H),PAPER);d=ImageDraw.Draw(im);d.rectangle([0,0,W,16],fill=ACC);return im
+def icon(L,key,cx,cy,s,a):
+    """Ikon Lucide, rata tengah di (cx,cy), tanpa kotak."""
+    if a<=0 or key not in IC:return
+    t=IC[key].resize((s,s),Image.LANCZOS)
+    al=t.getchannel('A').point(lambda v:int(v*a))
+    t.putalpha(al)
+    L.alpha_composite(t,(cx-s//2,cy-s//2))
+def lab(d,y,t,a,cx=CX):
+    f=F('Medium',32);w,_=tw(d,t,f);d.text((cx-w//2,y),t,font=f,fill=A(MUTE,a))
+def rule(d,y,a,w=96,cx=CX,col=ACC):
+    d.rectangle([cx-w//2,y,cx+w//2,y+3],fill=A(col,a))
+
+def c_title(p,eyebrow,title,sub):
+    im=paper();L=Image.new('RGBA',(W,H),(0,0,0,0));d=ImageDraw.Draw(L)
+    a0=ease(p*4)
+    icon(L,'mic_ink',CX,560,150,a0);d=ImageDraw.Draw(L)
+    lab(d,688,eyebrow,a0);rule(d,752,a0)
+    f=F('Bold',92);lines=wrap(d,title,f,660);y=824
+    for i2,l in enumerate(lines):
+        a=ease((p-.1-i2*.09)*4.5)
+        if a>0:ctext(d,y+int((1-a)*22),l,f,A(INK,a))
+        y+=108
+    a2=ease((p-.4)*4)
+    if a2>0:ctext(d,y+30,sub,F('Medium',32),A(MUTE,a2))
+    return Image.alpha_composite(im.convert('RGBA'),L).convert('RGB')
+
+def c_statement(p,eyebrow,w1,w2,ic,dark=False):
+    im=Image.new('RGB',(W,H),INK if dark else PAPER)
+    ImageDraw.Draw(im).rectangle([0,0,W,16],fill=ACC)
     L=Image.new('RGBA',(W,H),(0,0,0,0));d=ImageDraw.Draw(L)
-    y=top
-    for i,(kind,val,f,col,h) in enumerate(items):
-        a=ease((p-i*.09)*4.5)
-        dy=int((1-a)*22)
-        if a>0:
-            if kind=='t':
-                w,_=tw(d,val,f);d.text((CX-w//2,y+dy),val,font=f,fill=A(col,a))
-            elif kind=='rule':
-                d.rectangle([CX-val//2,y+dy,CX+val//2,y+dy+3],fill=A(col,a))
-            elif kind=='pill':
-                w,_=tw(d,val,f)
-                d.rounded_rectangle([CX-w//2-34,y+dy-18,CX+w//2+34,y+dy+h-16],26,outline=A(col,a),width=4)
-                d.text((CX-w//2,y+dy),val,font=f,fill=A(col,a))
-        y+=h
+    a0=ease(p*4.5)
+    icon(L,ic,CX,536,190,a0);d=ImageDraw.Draw(L)
+    lab(d,690,eyebrow,a0);rule(d,754,a0)
+    f=F('Bold',104)
+    a1=ease((p-.14)*4.5);a2=ease((p-.26)*4.5)
+    if a1>0:ctext(d,824+int((1-a1)*22),w1,f,A(PAPER if dark else INK,a1))
+    if a2>0:ctext(d,940+int((1-a2)*22),w2,f,A(ACC,a2))
     return Image.alpha_composite(im.convert('RGBA'),L).convert('RGB')
 
-def m_open(p):
-    im,_=card(p)
-    f1=F('Medium',32);f2=F('Bold',94)
-    d=ImageDraw.Draw(im)
-    L=wrap(d,'Balas Chat Lebih Cepat',f2,660)
-    items=[('t','PODCAST PIXEL',f1,MUTE,58),('rule',96,None,ACC,46)]
-    for l in L:items.append(('t',l,f2,INK,108))
-    items.append(('rule',0,None,ACC,30))
-    items.append(('t','bisnis & AI  ·  EP 00',F('Medium',30),MUTE,40))
-    top=820-sum(x[4] for x in items)//2
-    return stack(im,items,p,top)
-
-def m_a(p):
-    im=Image.new('RGB',(W,H),INK);d=ImageDraw.Draw(im)
-    d.rectangle([0,0,W,16],fill=ACC)
-    f=F('Bold',112);fs=F('Medium',32)
-    items=[('t','TELAT BALAS',fs,(176,170,166),54),('rule',96,None,ACC,54),
-           ('t','Order',f,PAPER,126),('t','hilang',f,ACC,126),
-           ('rule',0,None,ACC,34),('t','tanpa kamu sadar',F('Medium',38),(176,170,166),48)]
-    top=820-sum(x[4] for x in items)//2
-    return stack(im,items,p,top)
-
-def m_b(p):
-    im,_=card(p);d=ImageDraw.Draw(im)
-    f1=F('Medium',32);f2=F('Bold',52);f3=F('Bold',40)
-    L=Image.new('RGBA',(W,H),(0,0,0,0));dd=ImageDraw.Draw(L)
-    a0=ease(p*5)
-    w,_=tw(dd,'3 LANGKAH',f1)
-    dd.text((CX-w//2,int(520+(1-a0)*20)),'3 LANGKAH',font=f1,fill=A(MUTE,a0))
-    dd.rectangle([CX-48,590,CX+48,593],fill=A(ACC,a0))
-    rows=[('01','Kumpulkan chat lama'),('02','Minta AI buat draft'),('03','Kamu baca, kirim')]
-    y=692
-    for i,(n,t) in enumerate(rows):
-        a=ease((p-.12-i*.13)*4.5);dy=int((1-a)*20)
-        if a>0:
-            dd.text((CX-330,y+dy+12),n,font=f3,fill=A(ACC,a))
-            dd.text((CX-220,y+dy),t,font=f2,fill=A(INK,a))
-            if i<2:dd.rectangle([CX-330,y+dy+96,CX+330,y+dy+97],fill=A((214,210,204),a))
-        y+=130
+def c_steps(p,eyebrow,rows):
+    """Daftar bertahap. Tiap baris dipusatkan sebagai satu kesatuan ikon+teks."""
+    im=paper();L=Image.new('RGBA',(W,H),(0,0,0,0));d=ImageDraw.Draw(L)
+    a0=ease(p*4.5);lab(d,480,eyebrow,a0);rule(d,544,a0)
+    f=F('Bold',50);IS,GAPX=78,26
+    ws=[tw(d,t,f)[0] for _,t in rows]
+    y=646
+    for i2,(ic,t) in enumerate(rows):
+        a=ease((p-.12-i2*.15)*4.5)
+        if a<=0:
+            y+=164;continue
+        dy=int((1-a)*22);tot=IS+GAPX+ws[i2];x0=CX-tot//2
+        icon(L,ic,x0+IS//2,y+dy+44,IS,a);d=ImageDraw.Draw(L)
+        d.text((x0+IS+GAPX,y+dy+16),t,font=f,fill=A(INK,a))
+        if i2<len(rows)-1:d.rectangle([CX-300,y+dy+120,CX+300,y+dy+121],fill=A(LINE,a))
+        y+=164
     return Image.alpha_composite(im.convert('RGBA'),L).convert('RGB')
 
-def m_end(p):
-    im=shot_j(27.0,0)
-    im=Image.blend(im,Image.new('RGB',(W,H),PAPER),min(1,ease(p*2.6))*.93)
-    d=ImageDraw.Draw(im);d.rectangle([0,0,W,16],fill=ACC)
-    items=[('t','Mau aku bedah',F('Bold',72),INK,86),('t','punyamu?',F('Bold',72),INK,96),
-           ('rule',96,None,ACC,52),('t','tulis di komentar',F('Medium',42),MUTE,92),
-           ('pill','@jerapahmerah_',F('Bold',38),ACC,72)]
-    top=820-sum(x[4] for x in items)//2
-    return stack(im,items,max(0,(p-.25)/.75),top)
+def c_two(p,eyebrow,left,right):
+    im=paper();L=Image.new('RGBA',(W,H),(0,0,0,0));d=ImageDraw.Draw(L)
+    a0=ease(p*4.5);lab(d,556,eyebrow,a0);rule(d,620,a0)
+    for i2,(ic,t) in enumerate([left,right]):
+        a=ease((p-.14-i2*.16)*4.5)
+        if a<=0:continue
+        cx=CX-190+i2*380;dy=int((1-a)*22)
+        icon(L,ic,cx,744+dy,132,a);d=ImageDraw.Draw(L)
+        for j,l in enumerate(wrap(d,t,F('Bold',44),320)[:2]):
+            ctext(d,844+dy+j*52,l,F('Bold',44),A(INK,a),cx=cx)
+    a2=ease((p-.5)*4)
+    if a2>0:
+        d=ImageDraw.Draw(L)
+        d.ellipse([CX-32,712,CX+32,776],fill=A(ACC,a2))
+        ctext(d,722,'=',F('Bold',42),A(PAPER,a2))
+    return Image.alpha_composite(im.convert('RGBA'),L).convert('RGB')
 
-SEG=[('open',0.0,3.0),('J',3.0,7.2),('N',7.2,8.4),('J',8.4,11.4),('cutA',11.4,14.2),
-     ('J',14.2,18.0),('N',18.0,19.1),('J',19.1,22.2),('cutB',22.2,25.8),('J',25.8,27.8),('end',27.8,31.0)]
-DUR=SEG[-1][2];N=int(DUR*FPS)
-os.makedirs('f5',exist_ok=True)
-for i in range(N):
-    t=i/FPS
-    s=[x for x in SEG if x[1]<=t<x[2]] or [SEG[-1]]
-    kind,a,b=s[0];p=(t-a)/(b-a)
-    if kind=='open':im=m_open(p)
-    elif kind=='cutA':im=m_a(p)
-    elif kind=='cutB':im=m_b(p)
-    elif kind=='end':im=m_end(p)
-    elif kind=='N':im=zoomed(shot_n(t,2 if p<.55 else 0),1.0+p*.03)
-    else:
-        k=2 if p>.9 else int((t-a)/.45)%2
-        im=zoomed(shot_j(t,k),1.0+p*.035,int(p*-12))
-    px(im,2).save('f5/%04d.png'%i)
-print('frames',N)
+def c_three(p,eyebrow,words,icons):
+    im=paper();L=Image.new('RGBA',(W,H),(0,0,0,0));d=ImageDraw.Draw(L)
+    a0=ease(p*4.5);lab(d,576,eyebrow,a0);rule(d,640,a0)
+    for i2,wd in enumerate(words):
+        a=ease((p-.12-i2*.18)*5)
+        if a<=0:continue
+        cx=CX-250+i2*250;dy=int((1-a)*22)
+        icon(L,icons[i2],cx,770+dy,116,a);d=ImageDraw.Draw(L)
+        ctext(d,866+dy,wd,F('Bold',48),A(INK,a),cx=cx)
+        if i2<2:
+            d.polygon([(cx+106,812+dy),(cx+134,826+dy),(cx+106,840+dy)],fill=A(LINE,a))
+    return Image.alpha_composite(im.convert('RGBA'),L).convert('RGB')
+
+def c_end(p,bg):
+    im=Image.blend(bg,Image.new('RGB',(W,H),PAPER),min(1,ease(p*2.6))*.94)
+    ImageDraw.Draw(im).rectangle([0,0,W,16],fill=ACC)
+    L=Image.new('RGBA',(W,H),(0,0,0,0));d=ImageDraw.Draw(L)
+    q=max(0,(p-.2)/.8);a0=ease(q*3)
+    icon(L,'store_ink',CX,572,120,a0);d=ImageDraw.Draw(L)
+    f=F('Bold',72)
+    for i2,l in enumerate(['Tulis usahamu','di komentar']):
+        a=ease((q-i2*.1)*4)
+        if a>0:ctext(d,680+i2*92+int((1-a)*22),l,f,A(INK,a))
+    rule(d,884,a0)
+    a2=ease((q-.35)*4)
+    if a2>0:
+        ctext(d,940,'nanti aku bedah satu',F('Medium',42),A(MUTE,a2))
+        t='@jerapahmerah_';fw=F('Bold',38);w,_=tw(d,t,fw)
+        d.rounded_rectangle([CX-w//2-34,1030,CX+w//2+34,1106],26,outline=A(ACC,a2),width=4)
+        ctext(d,1050,t,fw,A(ACC,a2))
+    return Image.alpha_composite(im.convert('RGBA'),L).convert('RGB')
+
