@@ -2,7 +2,9 @@
 # Target: sekitar 60% motion, 40% talking.
 import os,sys
 sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'set_podcast.py')).read().split('# ---------- suara ----------')[0])
+D=os.path.dirname(os.path.abspath(__file__))
+exec(open(os.path.join(D,'panggung.py')).read())
+exec(open(os.path.join(D,'contoh_kartu.py')).read().split('\n\n',1)[1])   # CONTOH kartu; episode sungguhan merancang sendiri
 
 # ---------- suara ----------
 from toolkit.studio import voice_segments

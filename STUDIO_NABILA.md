@@ -48,10 +48,14 @@ Karena itu **pertanyaan pertama harus yang paling menohok** — itulah hook epis
 5. **Musik buatan sendiri** (`Synth` di `toolkit/studio.py`) atau tanpa musik. Dilarang memakai lagu atau rekaman orang lain.
 6. **Label AI TikTok: `isAigc: false`.** Isinya pixel art bergaya, bukan rekaman realistis buatan AI.
    (Kalau suatu saat sebuah episode memakai gambar realistis buatan AI, barulah `true`.)
-7. **Set dan sistem kartu motion WAJIB sama tiap episode** — itu identitas acara. Lihat
-   `examples/nabila_podcast/set_podcast.py` (set + kartu) dan `examples/nabila_podcast/rakit_episode.py` (perakitan).
-   Yang berganti tiap episode hanyalah **isi** kartu, **pilihan ikon**, dan **ritme potongan**, bukan gayanya.
-   **Semua kartu rata tengah** pada `x = 540`, termasuk tiap baris daftar (ikon + teks dipusatkan sebagai satu kesatuan).
+7. **Kartu motion selalu konsep orisinal. TIDAK ADA TEMPLATE TAMPILAN.**
+   Tiap episode kamu memilih sendiri bahasa visual kartunya dan menulis kodenya — contoh arah, bukan daftar wajib:
+   tipografi kinetik, kolase kertas, poster brutalis, grid editorial, papan tulis, cetak risograph, terminal/kode,
+   struk belanja, blueprint, stop-motion digital, data-viz, retro TV, kartu indeks, stiker, neon, koran lama.
+   Gaya yang kamu pakai **tidak boleh sama dengan 6 entri terakhir** `gaya_riwayat_tok`.
+   Yang BOLEH dipakai ulang hanyalah **alat** di `examples/nabila_podcast/panggung.py`
+   (area aman, `pakai_tema`, `lay`/`draw_stack`, `_wipe`, `fit`, `icon`, `cek_kartu`) dan struktur waktu di
+   `rakit_episode.py`. `contoh_kartu.py` adalah **contoh dari episode pertama, bukan template** — jangan dipakai ulang mentah.
 8. **Hanya kerjakan pesanan `brand: "tok"`.** Pesanan `jers` milik Bagas, `nua` milik Sonya. Lewati, jangan kunci, jangan ubah.
 9. **Jangan pernah memanggil ulang `creative_generate_speech` untuk "mencoba lagi"** — itu memakan kredit Jers dua kali.
 
@@ -149,22 +153,21 @@ Kalau Jers merevisi naskah (status kembali `antre` dengan `catatan`), perbaiki h
 
 Jers minta **konsep motion yang berbeda untuk setiap episode**, dan dia yang memilih sebelum kamu merender.
 
-**Yang TIDAK BOLEH berubah antar konsep:** adegan Jers dan Nabila. Latar ruang siaran, bingkai sebatas perut,
-skala sprite, ritme potongan, dan cara pose bertukar tetap persis seperti di `set_podcast.py`.
-Konsep hanya mengubah **kartu motion**.
+**Yang DIKUNCI, tidak pernah berubah:**
+- **Adegan Jers dan Nabila.** Latar ruang siaran, bingkai sebatas perut, skala sprite, ritme potongan,
+  dan cara pose bertukar tetap persis seperti di `panggung.py`. Konsep hanya menyentuh **kartu motion**.
+- **Isi** kartu pembuka dan penutup: pembuka selalu memuat wordmark **JERSTALK** dan judul episode,
+  penutup selalu memuat ajakan dan **@jerapahmerah_**. *Rupanya* bebas kamu rancang ulang seperti kartu lain —
+  yang dikunci isinya, bukan tampilannya.
 
-**Yang membedakan satu konsep dari yang lain** — minimal tiga dari empat hal ini harus berbeda:
-1. **Tema warna.** `pakai_tema('kertas'|'malam'|'biru'|'hutan'|'cetak'|'senja')` atau dict buatanmu
-   `pakai_tema(dict(paper=(..),ink=(..),acc=(..)))`. Panggil sekali sebelum menggambar kartu.
-2. **Susunan jenis kartu.** Mis. A bertumpu pada `c_statement` + `c_steps` + `c_end`;
-   B pada `c_block` + `c_three` + `c_badge`.
-3. **Watak gerak.** Mis. A tenang (naik perlahan), B tegas (sapuan blok dan pita).
-4. **Perlakuan huruf.** Mis. A dua kata raksasa per kartu, B kalimat utuh di blok warna.
+**Dua konsep harus benar-benar dua dunia visual yang berbeda**, bukan dua varian warna dari susunan yang sama.
+Beda di komposisi, bahan, watak gerak, dan perlakuan huruf — bukan cuma paletnya.
 
 **Langkah:**
 1. Baca `naskah` dan `catatan`. Baca `gaya_riwayat_tok` — konsep yang kamu ajukan **tidak boleh sama**
    dengan tiga episode terakhir.
-2. Rancang **dua konsep yang benar-benar berbeda**, bukan dua varian warna dari susunan yang sama.
+2. Rancang **dua konsep yang benar-benar berbeda**. Untuk tiap konsep tuliskan: nama arah visualnya,
+   bahan dan teksturnya, paletnya, perlakuan hurufnya, dan watak geraknya. Lalu tulis kodenya sendiri.
 3. Untuk tiap konsep, **render sungguhan tiga kartu kunci** memakai naskah episode ini — bukan sketsa,
    bukan contoh kosong. Jalankan `cek_kartu()` pada ketiganya. Simpan JPG 540x960 kualitas 82.
 4. Unggah keenam gambar sebagai aset Kantor Agent: alat `Artifact`, `action: "publish"`, `url` Kantor Agent,
@@ -173,8 +176,9 @@ Konsep hanya mengubah **kartu motion**.
    `konsep: [{k:"A", nama, gaya, ringkas, palet:["#..","#..","#.."], kartu:[...], frames:[url,url,url]}, {k:"B", ...}]`,
    `status: "pilih"`, `log`. Lalu beri tahu Jers.
    `nama` 2–4 kata · `gaya` satu kalimat · `ringkas` 1–2 kalimat · `palet` tiga hex tema itu.
-6. Simpan resep tiap konsep (tema, daftar jenis kartu, isi tiap kartu) di field `kartu`, supaya tahap render
-   tinggal menjalankannya.
+6. Simpan resep tiap konsep di field `kartu`: arah visual, palet, daftar adegan kartu beserta isinya, dan
+   **kode penggambarnya** (atau ringkasan yang cukup untuk menulis ulang kode yang sama persis), supaya tahap
+   render tinggal menjalankannya tanpa menebak-nebak.
 
 Ikon Lucide ikut tema: `python3 toolkit/lucide.py ic/ "circle-alert:#E48C3C"` menerima hex bebas.
 **Jangan memakai ikon warna `ink` di tema gelap** — tidak kelihatan.
@@ -184,8 +188,8 @@ Kalau Jers menolak keduanya (status kembali `konsep` dengan `catatan`), rancang 
 ---------------------------------------------------------------------------------------------------
 ### Tahap RENDER (dari `render`) dan REVISI (dari `revisi`)
 
-Pakai konsep yang dipilih Jers (`pilih` berisi "A" atau "B"; resepnya di field `kartu`). Panggil `pakai_tema()`
-dengan tema konsep itu sebelum menggambar kartu apa pun.
+Pakai konsep yang dipilih Jers (`pilih` berisi "A" atau "B"; resepnya di field `kartu`) dan tulis kartunya
+sesuai resep itu. Jangan diam-diam berganti arah di tengah render.
 
 **1. Buat suara (ElevenLabs).** Dua panggilan saja, satu per penutur:
 - `creative_generate_speech` dengan `model_id: "eleven_v4"`, **`generations_count: 1`**,
@@ -217,7 +221,7 @@ menimpa gambar tanpa memotong suara — itu yang membuatnya terasa seperti edita
 - **Pose bertukar tiap 0,42 detik** selama baris itu berlangsung (`jers_c_0`↔`jers_c_1`, `nabila_c_0`↔`nabila_c_1`),
   dan pose diam (`*_c_2`) dipakai saat jeda.
 - **Dorongan kamera** sangat pelan di tiap potongan (zoom maksimal 3,5%).
-- Koordinat set, latar, dan skala: ambil apa adanya dari `examples/nabila_podcast/set_podcast.py`.
+- Koordinat set, latar, dan skala: ambil apa adanya dari `examples/nabila_podcast/panggung.py`.
   Latarnya `assets/office/podcast_wall2.png`, diperbesar 1,55x, diburamkan, dan digeser berbeda untuk tiap orang
   supaya terasa dua sudut kamera.
 
@@ -226,31 +230,21 @@ Sistem visualnya: kertas `#F4F2ED`, tinta `#1B191F`, satu aksen `#C0502E`, garis
 label kecil berhuruf renggang, garis rambut sebagai pemisah, elemen masuk dengan naik 22 px dan memudar berurutan.
 Blok isi dipusatkan di sekitar `y = 800`, semuanya rata tengah pada `x = 540`.
 
-**Sepuluh jenis kartu** (semua sudah ditulis di `set_podcast.py`, panggil lewat `KARTU['nama']`):
-
-| fungsi | bentuk | cara masuk |
-|---|---|---|
-| `c_title` | kartu pembuka: ikon, wordmark **JERSTALK**, judul besar, keterangan | naik berurutan |
-| `c_statement` | dua kata raksasa bertumpuk, kata kedua beraksen; `dark=True` untuk beat berat | meluncur dari kiri |
-| `c_block` | **satu layar penuh warna aksen**, satu kalimat putih besar | warna menyapu turun, teks menyusul |
-| `c_steps` | daftar bernomor 01–03, tiap baris ikon + garis rambut | baris masuk dari kiri |
-| `c_two` | **layar terbelah**: kiri kertas, kanan tinta, satu lencana di tengah | separuh kanan menyapu masuk |
-| `c_three` | **tiga pita selebar layar** bergantian terang-gelap, bernomor | pita menyapu bergantian arah |
-| `c_quote` | kutipan besar rata kiri di latar tinta, tanda kutip aksen | naik baris demi baris |
-| `c_badge` | **stempel bundar besar** berisi satu kata | memantul membesar |
-| `c_check` | daftar lakukan/jangan dengan centang hijau dan silang aksen | selang-seling kiri-kanan |
-| `c_end` | penutup: ikon, ajakan besar, `@jerapahmerah_` di pil. **Latar kertas bersih, tanpa wajah** | memantul lalu naik |
+**Tidak ada katalog kartu.** Bentuk tiap kartu kamu rancang sendiri mengikuti konsep yang dipilih Jers.
+`contoh_kartu.py` berisi sepuluh kartu dari episode pertama sebagai **contoh cara memakai alatnya** —
+boleh dibaca untuk belajar `lay()`, `draw_stack()`, `_wipe()`, dan `fit()`, tapi rupanya jangan diulang.
 
 **Aturan variasi (Jers pernah menolak versi yang monoton):**
-- **Minimal lima jenis kartu berbeda** dalam satu episode, dan **tidak boleh dua kartu sejenis berurutan**.
-- **Minimal dua kartu bukan kertas putih** (`c_block`, `c_quote`, `c_badge`, `c_statement` gelap, atau `c_two`),
-  tersebar, jangan menumpuk di akhir.
-- Susunan jenis kartu episode ini **tidak boleh sama** dengan tiga episode terakhir di `gaya_riwayat_tok`.
+- Dalam satu episode, **tidak boleh dua kartu memakai komposisi yang sama berurutan**, dan sebaiknya ada
+  minimal empat komposisi berbeda.
+- **Minimal dua kartu memakai latar penuh warna atau gelap**, tersebar, jangan menumpuk di akhir.
+- Arah visual episode ini tidak boleh sama dengan **6 entri terakhir** `gaya_riwayat_tok`.
 
 **Aturan kerapian (ini yang bikin episode pertama ditolak):**
-- Isi kartu **harus mengisi area aman** `y 300–1360`, bukan sepita kecil di tengah dengan kertas kosong di atas dan bawah.
+- Isi kartu **harus mengisi area aman** `y 300–1360`, bukan sepita kecil di tengah dengan ruang kosong di atas dan bawah.
   Huruf judul 74–150 px, baris daftar 44–66 px. Jangan memakai ukuran kecil "biar muat" — pecah kalimatnya.
-- **Jalankan `cek_kartu(im, nama)` pada setiap kartu** (fungsi ada di `set_podcast.py`). Dia menolak kartu yang
+  Aturan ini berlaku untuk **apa pun** gaya yang kamu pilih.
+- **Jalankan `cek_kartu(im, nama)` pada setiap kartu** (fungsi ada di `panggung.py`). Dia menolak kartu yang
   isinya keluar area aman atau cuma mengisi kurang dari 45% tingginya. Kalau dia melempar galat, perbaiki kartunya —
   jangan dilewati.
 - Jangan pernah menaruh wajah Jers atau Nabila yang diburamkan di belakang teks kartu.
@@ -315,8 +309,11 @@ Metricool untuk brand jerapahmerah_." lalu beri tahu Jers.
 - `assets/sprites/nabila_c_0..2` — Nabila duduk di kursi kantor (tangan di dagu, tangan menjelaskan, diam). Sama persis ukurannya.
 - `assets/lucide/` — 1890 ikon Lucide (SVG) milik Jers. Sumber ikon **satu-satunya** untuk kartu motion.
 - `toolkit/lucide.py` — render ikon Lucide jadi PNG transparan berwarna.
-- `examples/nabila_podcast/set_podcast.py` — set, koordinat, dan lima jenis kartu motion. **Patokan, bukan inspirasi.**
-- `examples/nabila_podcast/rakit_episode.py` — perakitan lengkap tanya-jawab: potong suara, susun potongan 60/40, musik ducking.
+- `examples/nabila_podcast/panggung.py` — **patokan yang dikunci**: adegan Jers & Nabila, area aman, `pakai_tema`,
+  `lay`/`draw_stack`, `_wipe`, `fit`, `icon`, `cek_kartu`. Pakai apa adanya.
+- `examples/nabila_podcast/contoh_kartu.py` — sepuluh kartu episode pertama. **Contoh cara kerja, bukan template.**
+- `examples/nabila_podcast/rakit_episode.py` — struktur waktu satu episode: potong suara, potongan 60/40, musik ducking.
+  **Struktur waktunya ditiru; tampilan kartunya tidak.**
 - `toolkit/studio.py` — `voice_segments`, `VideoWriter`, `audit`, `Synth`, `duck`, `mix`, `place`, `cloud_upload`, `preview_copy`, `font()`.
 - `toolkit/layout.py` — `Layout`, `rich_text`, `fit_text`, `icon_label`, `ticker`.
 
