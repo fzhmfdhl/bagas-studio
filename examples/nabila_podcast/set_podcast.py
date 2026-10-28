@@ -60,6 +60,27 @@ LFT,RGT=96,984
 MIDY=(TOP+BOT)//2
 GREEN=(42,128,84)
 
+# --- tema warna: tiap konsep motion boleh memakai tema berbeda ---
+# Adegan Jers dan Nabila TIDAK terpengaruh tema; ini hanya untuk kartu motion.
+TEMA={
+ 'kertas': dict(paper=(244,242,237),ink=(27,25,31),acc=(192,80,46)),
+ 'malam':  dict(paper=(22,21,26), ink=(242,240,235),acc=(228,140,60)),
+ 'biru':   dict(paper=(239,243,249),ink=(16,26,46), acc=(36,84,194)),
+ 'hutan':  dict(paper=(242,245,239),ink=(20,30,24), acc=(36,120,72)),
+ 'cetak':  dict(paper=(236,231,222),ink=(30,27,23), acc=(178,50,38)),
+ 'senja':  dict(paper=(250,244,236),ink=(40,26,30), acc=(206,74,96)),
+}
+def _mix(a,b,t):return tuple(int(a[i]+(b[i]-a[i])*t) for i in range(3))
+def pakai_tema(t):
+    """t: nama di TEMA, atau dict(paper=,ink=,acc=[,mute=,line=]). Dipanggil sekali sebelum menggambar kartu."""
+    global PAPER,INK,ACC,MUTE,LINE,GREEN
+    d=TEMA[t] if isinstance(t,str) else dict(t)
+    PAPER=tuple(d['paper']);INK=tuple(d['ink']);ACC=tuple(d['acc'])
+    MUTE=tuple(d.get('mute') or _mix(INK,PAPER,.46))
+    LINE=tuple(d.get('line') or _mix(INK,PAPER,.84))
+    GREEN=tuple(d.get('ok') or (42,128,84))
+    return dict(paper=PAPER,ink=INK,acc=ACC,mute=MUTE,line=LINE)
+
 def paper(col=None):
     im=Image.new('RGB',(W,H),col or PAPER);ImageDraw.Draw(im).rectangle([0,0,W,16],fill=ACC);return im
 def icon(L,key,cx,cy,s,a,rot=0):

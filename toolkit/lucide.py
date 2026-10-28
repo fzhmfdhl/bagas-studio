@@ -5,7 +5,8 @@ Pakai:
     python3 toolkit/lucide.py ic/ "message-circle:ink" "sparkles:ink" "trending-down:paper"
     # -> ic/message-circle_ink.png, dst.
 
-Warna yang tersedia: ink (#1B191F), acc (#C0502E), paper (#F4F2ED), mute (#928E8A).
+Warna yang tersedia: ink (#1B191F), acc (#C0502E), paper (#F4F2ED), mute (#928E8A),
+atau hex bebas supaya cocok dengan tema konsep, mis. "mic:#E48C3C".
 Di dalam kode render, muat hasilnya dengan nama berkas tanpa ekstensi, mis. 'message-circle_ink'.
 """
 import os, sys, json, subprocess
@@ -23,6 +24,12 @@ def render(outdir, specs, size=320, stroke=1.6):
     for s in specs:
         name, _, col = s.partition(':')
         col = col or 'ink'
+        if col.startswith('#'):                      # warna bebas, mis. "mic:#F4F2ED"
+            hexv = col
+            if len(hexv) != 7:
+                raise ValueError('warna hex harus 7 karakter: %s' % col)
+            col = 'c' + hexv[1:]
+            COL.setdefault(col, hexv)
         if col not in COL:
             raise ValueError('warna tidak dikenal: %s' % col)
         p = os.path.join(SVG, name + '.svg')
