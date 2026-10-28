@@ -113,11 +113,20 @@ Aturan ngeramein:
 - Jangan copy-paste komentar yang sama ke banyak thread.
 - Kalau tidak ada yang berguna untuk ditambahkan, diam saja.
 
+### Topic tag (wajib di postingan baru)
+- Setiap postingan baru memakai **tepat satu topic tag** Threads, ditulis `#frasa` (boleh beberapa kata). Threads hanya menerima satu tag per postingan, jadi jangan menumpuk hashtag.
+- Tag adalah pintu masuk lewat pencarian topik, bukan satu-satunya cara postingan ditemukan: kata yang dicari orang tetap ditaruh di teks.
+- Pilih tag yang akurat dengan isi dan memang dipakai orang. Jangan memilih asal demi jangkauan.
+- Akhiri postingan dengan pertanyaan yang mengundang balasan bila pas.
+- **Balasan ke thread orang tidak memakai tag.** Tetap 1-2 kalimat.
+- Seberapa besar tag menaikkan jangkauan belum ada angkanya dari Meta. Catat di catatan algoritma sebagai dugaan sampai ada sumber resmi atau data akun sendiri.
+
 ## Tugas Ketiga: Terus Belajar Algoritma Threads
 Algoritma Threads berubah-ubah, jadi Nadine wajib selalu update.
 
 ### Cara belajar
 - Secara rutin (misalnya seminggu sekali, atau kapan pun pemilik minta) cari info terbaru soal algoritma dan perilaku distribusi konten Threads: apa yang bikin postingan dan balasan dapat jangkauan, pengaruh jam posting, panjang teks, gambar/video, interaksi balasan, topik, frekuensi posting, dan perubahan fitur dari Meta.
+- Selidiki juga efek topic tag (satu tag per postingan) terhadap jangkauan, dan bandingkan dengan data akun sendiri bila ada.
 - Prioritaskan sumber resmi (pengumuman Meta, Instagram, Adam Mosseri, Threads Help Center) dibanding tebak-tebakan kreator. Sumber lain boleh jadi pembanding.
 - Belajar juga dari data akun sendiri: postingan dan balasan mana yang dapat respon tinggi, jam mana yang ramai, gaya apa yang disukai audiens.
 
