@@ -82,7 +82,9 @@ Pesanan: dokumen `st_<id>` dengan `jenis: "studio"` dan `brand: "tok"`.
 | `antre` | perlu riset dan naskah | **kamu** |
 | `proses` | sedang dikunci dan dikerjakan | kamu |
 | `naskah` | naskah siap, menunggu Jers menyetujui | Jers |
-| `render` | naskah disetujui, buat suara dan sunting videonya | **kamu** |
+| `konsep` | naskah disetujui, rancang dua konsep motion | **kamu** |
+| `pilih` | dua konsep siap, menunggu Jers memilih | Jers |
+| `render` | konsep dipilih, buat suara dan sunting videonya | **kamu** |
 | `revisi` | Jers minta perbaikan | **kamu** |
 | `review` | video siap, menunggu Jers | Jers |
 | `setuju` | disetujui, siap dijadwalkan | halaman atau kamu |
@@ -105,11 +107,11 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 ## Alur satu sesi
 
 1. **Cari pekerjaan.** `ArtifactData` action `query`, collection `data/users/me`, where `jenis == "studio"`.
-   Saring sendiri: hanya `brand == "tok"`. Pilih SATU pesanan tertua berstatus `antre`, `render`, atau `revisi`.
+   Saring sendiri: hanya `brand == "tok"`. Pilih SATU pesanan tertua berstatus `antre`, `konsep`, `render`, atau `revisi`.
    Pesanan `proses` yang `diperbarui` lebih dari 90 menit lalu dianggap macet: kerjakan ulang tahapnya.
 2. **Kalau tidak ada pekerjaan** dan belum ada pesanan `tok` hari ini: buat pesanan harian baru sendiri.
-   Kalau pesanan hari ini sedang menunggu Jers (`naskah`, `review`): jawab "Menunggu Jers." dan selesai, tanpa notifikasi.
-3. **Kunci.** `update`: `status: "proses"`, `tahap: "naskah"|"render"|"revisi"`, `diperbarui: <ISO>`, `log`.
+   Kalau pesanan hari ini sedang menunggu Jers (`naskah`, `pilih`, `review`): jawab "Menunggu Jers." dan selesai, tanpa notifikasi.
+3. **Kunci.** `update`: `status: "proses"`, `tahap: "naskah"|"konsep"|"render"|"revisi"`, `diperbarui: <ISO>`, `log`.
 4. Kerjakan tahapnya.
 5. Tulis hasil, lalu kirim notifikasi push singkat ke Jers bila alatnya tersedia.
 6. Kalau ada galat yang tidak bisa diselesaikan: `status: "gagal"`, `log: "<penjelasan singkat>"`.
@@ -143,7 +145,47 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 Kalau Jers merevisi naskah (status kembali `antre` dengan `catatan`), perbaiki hanya yang diminta.
 
 ---------------------------------------------------------------------------------------------------
+### Tahap KONSEP MOTION (dari `konsep`)
+
+Jers minta **konsep motion yang berbeda untuk setiap episode**, dan dia yang memilih sebelum kamu merender.
+
+**Yang TIDAK BOLEH berubah antar konsep:** adegan Jers dan Nabila. Latar ruang siaran, bingkai sebatas perut,
+skala sprite, ritme potongan, dan cara pose bertukar tetap persis seperti di `set_podcast.py`.
+Konsep hanya mengubah **kartu motion**.
+
+**Yang membedakan satu konsep dari yang lain** — minimal tiga dari empat hal ini harus berbeda:
+1. **Tema warna.** `pakai_tema('kertas'|'malam'|'biru'|'hutan'|'cetak'|'senja')` atau dict buatanmu
+   `pakai_tema(dict(paper=(..),ink=(..),acc=(..)))`. Panggil sekali sebelum menggambar kartu.
+2. **Susunan jenis kartu.** Mis. A bertumpu pada `c_statement` + `c_steps` + `c_end`;
+   B pada `c_block` + `c_three` + `c_badge`.
+3. **Watak gerak.** Mis. A tenang (naik perlahan), B tegas (sapuan blok dan pita).
+4. **Perlakuan huruf.** Mis. A dua kata raksasa per kartu, B kalimat utuh di blok warna.
+
+**Langkah:**
+1. Baca `naskah` dan `catatan`. Baca `gaya_riwayat_tok` — konsep yang kamu ajukan **tidak boleh sama**
+   dengan tiga episode terakhir.
+2. Rancang **dua konsep yang benar-benar berbeda**, bukan dua varian warna dari susunan yang sama.
+3. Untuk tiap konsep, **render sungguhan tiga kartu kunci** memakai naskah episode ini — bukan sketsa,
+   bukan contoh kosong. Jalankan `cek_kartu()` pada ketiganya. Simpan JPG 540x960 kualitas 82.
+4. Unggah keenam gambar sebagai aset Kantor Agent: alat `Artifact`, `action: "publish"`, `url` Kantor Agent,
+   `asset: true`, `file_paths: [...]`. Pakai `url` yang dikembalikan apa adanya.
+5. `update` pesanan:
+   `konsep: [{k:"A", nama, gaya, ringkas, palet:["#..","#..","#.."], kartu:[...], frames:[url,url,url]}, {k:"B", ...}]`,
+   `status: "pilih"`, `log`. Lalu beri tahu Jers.
+   `nama` 2–4 kata · `gaya` satu kalimat · `ringkas` 1–2 kalimat · `palet` tiga hex tema itu.
+6. Simpan resep tiap konsep (tema, daftar jenis kartu, isi tiap kartu) di field `kartu`, supaya tahap render
+   tinggal menjalankannya.
+
+Ikon Lucide ikut tema: `python3 toolkit/lucide.py ic/ "circle-alert:#E48C3C"` menerima hex bebas.
+**Jangan memakai ikon warna `ink` di tema gelap** — tidak kelihatan.
+
+Kalau Jers menolak keduanya (status kembali `konsep` dengan `catatan`), rancang dua konsep baru yang berbeda lagi.
+
+---------------------------------------------------------------------------------------------------
 ### Tahap RENDER (dari `render`) dan REVISI (dari `revisi`)
+
+Pakai konsep yang dipilih Jers (`pilih` berisi "A" atau "B"; resepnya di field `kartu`). Panggil `pakai_tema()`
+dengan tema konsep itu sebelum menggambar kartu apa pun.
 
 **1. Buat suara (ElevenLabs).** Dua panggilan saja, satu per penutur:
 - `creative_generate_speech` dengan `model_id: "eleven_v4"`, **`generations_count: 1`**,
@@ -239,7 +281,7 @@ kepala tidak terpotong, dan suara tidak terpotong di ujung baris. Perbaiki lalu 
 plus 3–5 tagar relevan. Tanpa emoji berlebihan.
 
 **10. Simpan.** `update`: `video`, `caption`, `tagar`, `suara`, `status: "review"`, `log`.
-Tambahkan nama gaya kartu ke `studio_meta.gaya_riwayat_tok`.
+Tambahkan nama konsep, temanya, dan susunan jenis kartunya ke `studio_meta.gaya_riwayat_tok` (simpan 12 terakhir).
 
 **Lampiran revisi:** bila pesanan punya `lampiran`, unduh tiap gambar dengan alat `Artifact`
 (`action: "read"`, `url` Kantor Agent, `path: "<id>"`), lalu **lihat** (Read). Cari adegan yang cocok, perbaiki,
