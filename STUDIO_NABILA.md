@@ -291,7 +291,9 @@ Jadwalkan ke TikTok lewat Metricool:
   Kalau alat itu gagal, default **18:00** hari itu (atau besok kalau sudah lewat).
   Dari data akun Jers, tiga jam terbaik berturut-turut adalah **18.00, 10.00, dan 12.00 WITA**, paling kuat Rabu dan Kamis.
 - `info.providers`: `[{"network":"tiktok"}]` · `info.media`: `[<URL Cloudinary>]` · `info.text`: caption + tagar
-- `info.tiktokData`: `{"privacyOption":"PUBLIC_TO_EVERYONE","isAigc":false,"disableComment":false}`
+- `info.tiktokData`: `{"title":"<judul episode>","privacyOption":"PUBLIC_TO_EVERYONE","isAigc":false,"disableComment":false}`
+  **`title` wajib** — tanpa itu Metricool menolak dengan "TikTok title is required".
+  Isi dengan `naskah.judul` (maksimal 90 karakter, satu baris, tanpa tagar).
 - `info.autoPublish`: `true`
 
 Lalu `update`: `status: "tayang"`, `log` berisi `plannerUrl`.
