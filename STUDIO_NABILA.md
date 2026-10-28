@@ -62,6 +62,7 @@ Karena itu **pertanyaan pertama harus yang paling menohok** — itulah hook epis
 
 Jers memberi video acuan dan berkata: **"saya mau Nabila seperti ini editing motionnya."**
 Yang ditiru adalah **cara mengedit bagian motion**, bukan merek, logo, atau isinya.
+Bahasa ini **tidak menggantikan tahap konsep**: tiap episode tetap mengajukan dua referensi ke Jers dulu.
 Contoh hidup dari bahasa ini: `examples/nabila_podcast/contoh_gerak.py` (9 detik, memakai alat `gerak.py`).
 Jalankan dan tonton dulu sebelum merancang: `python3 examples/nabila_podcast/contoh_gerak.py /tmp/contoh.mp4`.
 
@@ -195,6 +196,10 @@ Kalau Jers merevisi naskah (status kembali `antre` dengan `catatan`), perbaiki h
 
 ---------------------------------------------------------------------------------------------------
 ### Tahap KONSEP MOTION (dari `konsep`)
+
+> **Tahap ini WAJIB di setiap episode dan tidak pernah dilewati**, walaupun bahasa editingnya sudah dikunci.
+> Jers selalu melihat referensi dulu (dua konsep, masing-masing tiga frame kunci) dan memilih, baru kamu merender.
+> Jangan merender video penuh sebelum `pilih` terisi.
 
 Jers minta **konsep motion yang berbeda untuk setiap episode**, dan dia yang memilih sebelum kamu merender.
 
