@@ -99,7 +99,12 @@ Field pesanan:
 - `topik`, `sudut`, `catatan` (arahan Jers), `sumber` — `harian` (kamu riset sendiri) atau `request` (topik dari Jers, lewat tab "Request topik" di Kantor Agent)
 - `naskah`: `{judul, baris: [{s:"J"|"N", t:"kalimat"}], kata, perkiraan}` — **dialog**, bukan monolog
 - `suara`: `{flow_id, J:{session_id, generation_id}, N:{session_id, generation_id}}` — simpan supaya revisi tidak membuat suara baru
-- `video`: `{url, cloud, durasi, versi}` · `caption` · `tagar` (array) · `jadwal` (ISO) · `jam`
+- `video`: **nama field ini pasti, jangan diubah-ubah** —
+  `url` = URL aset Kantor Agent (`/_blob/<id>`, untuk diputar di halaman) ·
+  `cloud` = **URL publik Cloudinary lengkap berakhiran `.mp4`** (dikirim ke Metricool) ·
+  `durasi` (detik) · `versi` (angka).
+  Jangan pernah menaruh public_id Cloudinary di `cloud` — Metricool menolak dengan "Failed to normalize media".
+- `caption` · `tagar` (array) · `jadwal` (ISO) · `jam`
 - `lampiran`: array URL `/_blob/<id>` (tangkapan layar revisi dari Jers)
 - `log`, `tahap`, `diperbarui`
 
@@ -267,7 +272,9 @@ kepala tidak terpotong, dan suara tidak terpotong di ujung baris. Perbaiki lalu 
 
 **8. Ekspor dan unggah.** `final.mp4` 1080x1920, 30 fps, H.264 + AAC, 30–90 detik.
 - Cloudinary: alat `sign-upload` dengan `{"folder":"nabila-studio","public_id":"<id pesanan>-v<nomor>"}` → `sign.json`,
-  lalu `python3 toolkit/studio.py upload final.mp4 sign.json video` → URL publik (untuk TikTok).
+  lalu `python3 toolkit/studio.py upload final.mp4 sign.json video` → URL publik.
+  **Simpan URL lengkap itu (yang berawalan `https://res.cloudinary.com/` dan berakhiran `.mp4`) ke `video.cloud`**,
+  bukan public_id-nya.
 - Pratinjau: `preview_copy(final, prev.mp4)` lalu unggah sebagai aset Kantor Agent
   (alat `Artifact`, `url` Kantor Agent, `asset: true`, `file_path`) → URL aset.
 
@@ -290,7 +297,7 @@ Jadwalkan ke TikTok lewat Metricool:
   Kalau kosong: panggil `getBestTimeToPostByNetwork` untuk TikTok dan pakai jam tertinggi hari itu.
   Kalau alat itu gagal, default **18:00** hari itu (atau besok kalau sudah lewat).
   Dari data akun Jers, tiga jam terbaik berturut-turut adalah **18.00, 10.00, dan 12.00 WITA**, paling kuat Rabu dan Kamis.
-- `info.providers`: `[{"network":"tiktok"}]` · `info.media`: `[<URL Cloudinary>]` · `info.text`: caption + tagar
+- `info.providers`: `[{"network":"tiktok"}]` · `info.media`: `[<URL Cloudinary lengkap, berakhiran .mp4>]` · `info.text`: caption + tagar
 - `info.tiktokData`: `{"title":"<judul episode>","privacyOption":"PUBLIC_TO_EVERYONE","isAigc":false,"disableComment":false}`
   **`title` wajib** — tanpa itu Metricool menolak dengan "TikTok title is required".
   Isi dengan `naskah.judul` (maksimal 90 karakter, satu baris, tanpa tagar).
