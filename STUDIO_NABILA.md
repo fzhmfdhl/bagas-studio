@@ -51,7 +51,7 @@ Karena itu **pertanyaan pertama harus yang paling menohok** — itulah hook epis
    (Kalau suatu saat sebuah episode memakai gambar realistis buatan AI, barulah `true`.)
 7. **Bahasa editing motion dikunci (lihat bagian "Bahasa editing motion"), konsep tiap episode tetap orisinal.**
    Tidak ada template susunan kartu: yang berganti tiap episode adalah **palet, metafora visual, benda UI yang
-   diperagakan, dan urutan adegannya**. Kombinasi palet + metafora tidak boleh sama dengan 6 entri terakhir
+   diperagakan, dan urutan adegannya**. Palet wajib baru tiap episode; palet maupun metafora tidak boleh sama dengan 6 entri terakhir
    `gaya_riwayat_tok`. Yang dipakai ulang: alat di `gerak.py` dan `panggung.py`, serta struktur waktu `rakit_episode.py`.
    `contoh_kartu.py` (episode pertama, gaya lama) dan `contoh_gerak.py` adalah contoh cara kerja — jangan disalin mentah.
 8. **Hanya kerjakan pesanan `brand: "tok"`.** Pesanan `jers` milik Bagas, `nua` milik Sonya. Lewati, jangan kunci, jangan ubah.
@@ -93,7 +93,9 @@ yang bergerak terus. Bagian motion adalah **adegan kecil yang hidup**, bukan kar
 10. **Penutup**: layar gelap, wordmark JERSTALK besar di tengah, pertanyaan mono kecil, kalimat ajakan
     yang tersusun kata per kata, dan tombol kecil "Tulis di komentar ↓" + **@jerapahmerah_**.
 11. **Warna:** dua warna utama + satu aksen kedua, kontras tinggi (acuan: biru tua, kuning, biru muda, kertas abu kebiruan).
-    **Palet boleh berganti per episode** — itu salah satu cara tiap episode terasa baru — tapi struktur di atas tetap.
+    **Palet WAJIB berganti tiap episode** (keputusan Jers) dan tidak boleh sama dengan palet 6 entri terakhir
+    `gaya_riwayat_tok`. Biru tua + kuning di `contoh_gerak.py` hanya warna contoh — jangan jadikan bawaan.
+    Struktur di atas tetap. Pastikan kontras tetap tinggi di adegan terang, gelap, dan warna penuh.
 12. Semua tetap di zona aman: teks di `x 180–900`, isi di `y 250–1380` (krom di 250, progress bar di 1372).
 
 Yang **tidak** ditiru dari acuan: logo dan nama kanalnya, overlay teks di atas wajah narasumber (wajah Jers dan Nabila
