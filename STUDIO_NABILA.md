@@ -168,7 +168,9 @@ menimpa gambar tanpa memotong suara — itu yang membuatnya terasa seperti edita
 
 **4. Gambar tiap frame.**
 - **Potongan mengikuti penutur, lalu pindah ke kartu:** pertanyaan N tampil penuh di shot Nabila;
-  jawaban J tampil 0,7 detik di shot Jers lalu berganti ke kartu motion sampai jawaban itu habis.
+  jawaban J tampil 0,7 detik di shot Jers lalu berganti ke kartu motion.
+  **Pada jawaban panjang, kembalilah ke wajah Jers di ekor jawaban** (sekitar 1 detik terakhir) — kalau kartu
+  dibiarkan sampai kalimat habis, rasionya melewati 70% dan terasa seperti slideshow.
   Hitung rasionya setelah render; targetnya **55–65% motion**.
 - **Pose bertukar tiap 0,42 detik** selama baris itu berlangsung (`jers_c_0`↔`jers_c_1`, `nabila_c_0`↔`nabila_c_1`),
   dan pose diam (`*_c_2`) dipakai saat jeda.
@@ -182,19 +184,35 @@ Sistem visualnya: kertas `#F4F2ED`, tinta `#1B191F`, satu aksen `#C0502E`, garis
 label kecil berhuruf renggang, garis rambut sebagai pemisah, elemen masuk dengan naik 22 px dan memudar berurutan.
 Blok isi dipusatkan di sekitar `y = 800`, semuanya rata tengah pada `x = 540`.
 
-**Lima jenis kartu yang tersedia** (sudah ditulis di `set_podcast.py`, tinggal diisi):
+**Sepuluh jenis kartu** (semua sudah ditulis di `set_podcast.py`, panggil lewat `KARTU['nama']`):
 
-| fungsi | kapan dipakai |
-|---|---|
-| `c_title` | kartu pembuka: ikon mik, wordmark **JERSTALK**, judul episode, keterangan. Pertanyaan pertama Nabila diputar di atasnya |
-| `c_statement` | satu gagasan jadi dua kata besar, kata kedua berwarna aksen; varian `dark=True` untuk beat yang berat |
-| `c_steps` | tiga langkah berurutan, tiap baris satu ikon, dipisah garis rambut |
-| `c_two` | dua hal yang disandingkan, dipisah bulatan aksen |
-| `c_three` | tiga kata beruntun dengan panah kecil, mis. Baca → Benerin → Kirim |
-| `c_end` | kartu penutup: ajakan + `@jerapahmerah_` di dalam pil bergaris |
+| fungsi | bentuk | cara masuk |
+|---|---|---|
+| `c_title` | kartu pembuka: ikon, wordmark **JERSTALK**, judul besar, keterangan | naik berurutan |
+| `c_statement` | dua kata raksasa bertumpuk, kata kedua beraksen; `dark=True` untuk beat berat | meluncur dari kiri |
+| `c_block` | **satu layar penuh warna aksen**, satu kalimat putih besar | warna menyapu turun, teks menyusul |
+| `c_steps` | daftar bernomor 01–03, tiap baris ikon + garis rambut | baris masuk dari kiri |
+| `c_two` | **layar terbelah**: kiri kertas, kanan tinta, satu lencana di tengah | separuh kanan menyapu masuk |
+| `c_three` | **tiga pita selebar layar** bergantian terang-gelap, bernomor | pita menyapu bergantian arah |
+| `c_quote` | kutipan besar rata kiri di latar tinta, tanda kutip aksen | naik baris demi baris |
+| `c_badge` | **stempel bundar besar** berisi satu kata | memantul membesar |
+| `c_check` | daftar lakukan/jangan dengan centang hijau dan silang aksen | selang-seling kiri-kanan |
+| `c_end` | penutup: ikon, ajakan besar, `@jerapahmerah_` di pil. **Latar kertas bersih, tanpa wajah** | memantul lalu naik |
 
-Pakai **jenis yang berbeda-beda** dalam satu episode supaya tidak monoton, dan ganti urutannya antar episode.
-Catat susunannya ke `gaya_riwayat_tok`.
+**Aturan variasi (Jers pernah menolak versi yang monoton):**
+- **Minimal lima jenis kartu berbeda** dalam satu episode, dan **tidak boleh dua kartu sejenis berurutan**.
+- **Minimal dua kartu bukan kertas putih** (`c_block`, `c_quote`, `c_badge`, `c_statement` gelap, atau `c_two`),
+  tersebar, jangan menumpuk di akhir.
+- Susunan jenis kartu episode ini **tidak boleh sama** dengan tiga episode terakhir di `gaya_riwayat_tok`.
+
+**Aturan kerapian (ini yang bikin episode pertama ditolak):**
+- Isi kartu **harus mengisi area aman** `y 300–1360`, bukan sepita kecil di tengah dengan kertas kosong di atas dan bawah.
+  Huruf judul 74–150 px, baris daftar 44–66 px. Jangan memakai ukuran kecil "biar muat" — pecah kalimatnya.
+- **Jalankan `cek_kartu(im, nama)` pada setiap kartu** (fungsi ada di `set_podcast.py`). Dia menolak kartu yang
+  isinya keluar area aman atau cuma mengisi kurang dari 45% tingginya. Kalau dia melempar galat, perbaiki kartunya —
+  jangan dilewati.
+- Jangan pernah menaruh wajah Jers atau Nabila yang diburamkan di belakang teks kartu.
+- Jangan menerapkan dorongan kamera (`zoomed`) pada kartu motion; itu memotong tepinya.
 
 **Ikon Lucide.** Pilih nama ikon dari `assets/lucide/`, lalu render dulu sebelum menggambar:
 ```
