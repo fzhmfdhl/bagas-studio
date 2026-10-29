@@ -7,10 +7,11 @@ exec(open(os.path.join(D,'panggung.py')).read())
 exec(open(os.path.join(D,'contoh_kartu.py')).read().split('\n\n',1)[1])   # CONTOH kartu; episode sungguhan merancang sendiri
 
 # ---------- suara ----------
-from toolkit.studio import voice_segments
+from toolkit.studio import voice_segments, word_times
 QL=['Banyak yang nanya, AI ini bisa bantu apa sih buat usaha kecil?','Kenapa harus chat?','Terus caranya gimana?','Nggak takut nadanya jadi kaku?','Jadi kita tinggal apa?','Buat yang mau coba?']
 AL=['Paling cepat kelihatan hasilnya di balas chat pelanggan.','Karena telat balas itu diam-diam makan omzet, dan jarang ada yang sadar.','Kumpulkan chat lama kamu, kasih ke AI, minta dia bikin draft balasan.','Nggak, karena contohnya dari chat kamu sendiri. Nada bicaranya tetap kamu.','Baca, benerin sedikit, kirim. Itu saja.','Tulis usaha kamu di komentar, nanti aku bedah satu.']
 QS=voice_segments('q.wav',QL);AS=voice_segments('a.wav',AL)
+AW=[word_times(AS[i]['audio'],AL[i]) for i in range(len(AL))]   # waktu tiap kata: pemicu ketukan & caption
 
 # Pertanyaan pertama Nabila diputar DI ATAS kartu judul (cold open), bukan di shot Nabila.
 LEAD=.45;GAP=.30;JHEAD=.70;TAIL=2.2
@@ -69,7 +70,16 @@ for fi in range(N):
                 k=int(e/.42)%2
                 im=zoomed(shot_j(t,k),1.0+p*.035,int(p*-12))
             else:
-                q=(e-JHEAD)/max(.3,(c['b']-c['a'])-JHEAD)
-                im=card_for(c['card'],min(1,q*1.35),shot_j(t,2));mot+=1
+                # progres mengikuti KATA yang sudah terdengar, bukan persentase durasi:
+                # adegan baru lengkap saat kata terakhir mulai diucapkan, dan bertahan sampai suara habis.
+                W=AW[c['card']];sudah=sum(1 for w in W if c['a']+w[1]<=t)
+                im=card_for(c['card'],sudah/max(1,len(W)),shot_j(t,2));mot+=1
     px(im,2).save('f7/%04d.png'%fi)
 print('frames',N,'motion',round(100*mot/N),'%')
+
+# Cek sinkron (wajib): motion tidak boleh pergi sebelum suara selesai, ketukan terakhir dekat akhir jawaban.
+for c in cues:
+    if c['w']!='J':continue
+    W=AW[c['card']];akhir_suara=c['a']+W[-1][2];akhir_motion=c['b']+GAP/2;ketukan=c['a']+W[-1][1]
+    ok=akhir_motion>=akhir_suara and akhir_suara-ketukan<=1.0
+    print('jawaban',c['card']+1,'suara',round(akhir_suara,2),'motion',round(akhir_motion,2),'ketukan_terakhir',round(ketukan,2),'OK' if ok else 'GAGAL')

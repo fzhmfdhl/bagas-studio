@@ -87,9 +87,10 @@ yang bergerak terus. Bagian motion adalah **adegan kecil yang hidup**, bukan kar
    samar yang berputar pelan** sebagai watermark.
 8. **Transisi besar memakai sapuan pecahan miring** (`sapuan()`) dua atau tiga kali per episode, ganti adegan tepat di p = 0,5.
    Potongan biasa: langsung, tanpa fade panjang.
-9. **Caption pill karaoke HANYA di bagian motion** (`caption()`): pill gelap di bawah isi (y ≈ 1290), 2–4 kata
-   yang sedang diucapkan, kata yang terdengar dan kata kunci berwarna aksen. Waktunya diambil dari durasi baris suara —
-   bagi rata per kata kalau tidak ada stempel waktu. **Adegan bicara Jers dan Nabila tetap tanpa subtitle.**
+9. **Caption pill karaoke HANYA di bagian motion** (`caption()`): pill gelap di bawah isi (y ≈ 1290, JANGAN lebih
+   rendah — di bawah 1380 tertutup antarmuka TikTok), 2–4 kata yang sedang diucapkan, kata yang terdengar dan kata kunci
+   berwarna aksen. Waktu tiap kata WAJIB dari `word_times()` (lihat "Sinkron dengan suara"), bukan dibagi rata.
+   **Adegan bicara Jers dan Nabila tetap tanpa subtitle.**
 10. **Penutup**: layar gelap, wordmark JERSTALK besar di tengah, pertanyaan mono kecil, kalimat ajakan
     yang tersusun kata per kata, dan tombol kecil "Tulis di komentar ↓" + **@jerapahmerah_**.
 11. **Warna:** dua warna utama + satu aksen kedua, kontras tinggi (acuan: biru tua, kuning, biru muda, kertas abu kebiruan).
@@ -267,16 +268,34 @@ menimpa gambar tanpa memotong suara — itu yang membuatnya terasa seperti edita
 
 **4. Gambar tiap frame.**
 - **Potongan mengikuti penutur, lalu pindah ke kartu:** pertanyaan N tampil penuh di shot Nabila;
-  jawaban J tampil 0,7 detik di shot Jers lalu berganti ke kartu motion.
-  **Pada jawaban panjang, kembalilah ke wajah Jers di ekor jawaban** (sekitar 1 detik terakhir) — kalau kartu
-  dibiarkan sampai kalimat habis, rasionya melewati 70% dan terasa seperti slideshow.
-  Hitung rasionya setelah render; targetnya **55–65% motion**.
+  jawaban J tampil 0,7 detik di shot Jers lalu berganti ke bagian motion.
+  **Bagian motion bertahan sampai kata terakhir jawaban selesai diucapkan** (+0,1 detik), lalu baru memotong
+  ke Nabila di jeda antarbaris. **JANGAN kembali ke wajah Jers di ekor jawaban** — Jers menolaknya: editingnya
+  terasa "selesai terlalu cepat" karena gambar pergi saat suara masih bicara (29 Okt 2026).
+  Atur rasio **hanya** lewat lama shot wajah di AWAL jawaban (0,7–1,4 detik). Targetnya **55–65% motion**.
 - **Pose bertukar tiap 0,42 detik** selama baris itu berlangsung (`jers_c_0`↔`jers_c_1`, `nabila_c_0`↔`nabila_c_1`),
   dan pose diam (`*_c_2`) dipakai saat jeda.
 - **Dorongan kamera** sangat pelan di tiap potongan (zoom maksimal 3,5%).
 - Koordinat set, latar, dan skala: ambil apa adanya dari `examples/nabila_podcast/panggung.py`.
   Latarnya `assets/office/podcast_wall2.png`, diperbesar 1,55x, diburamkan, dan digeser berbeda untuk tiap orang
   supaya terasa dua sudut kamera.
+
+**4b. Sinkron dengan suara (WAJIB — Jers mengeluh editing "terlalu cepat selesai").**
+Gambar mengikuti kata, bukan jam dinding.
+- Untuk tiap baris J, hitung waktu kata: `from toolkit.studio import word_times`;
+  `W = word_times(SJ[i]['audio'], baris_J[i])` → `[(kata, mulai, selesai), ...]` relatif awal baris
+  (geser dengan waktu mulai baris di garis waktu). Gratis, dari energi suara; ketepatannya sekitar 0,1–0,2 detik.
+- **Setiap ketukan adegan dipicu oleh kata yang diperagakannya.** Contoh: baris daftar "kisaran harga" muncul tepat
+  saat kata "kisaran" mulai terdengar; kata pukulan ("BUKAN", "SATU") muncul di kata itu, tidak lebih awal dari 0,15 detik.
+  Tulis jadwal ketukan sebagai daftar `(kata_pemicu, aksi)`, lalu cari waktunya di `W` — jangan menulis detik tebakan.
+- **Ketukan terakhir mendarat di frasa terakhir jawaban.** Isi adegan tidak boleh "lengkap lalu diam" lebih dari
+  1 detik sebelum jawaban selesai. Simpan satu elemen (stiker, coretan, centang, tombol) untuk kata-kata terakhir,
+  dan biarkan gerak halus (napas skala 1–2%, geser pelan, lingkaran latar) tetap berjalan sampai potongan.
+- Animasi masuk tiap elemen 0,25–0,45 detik. Jangan menskalakan seluruh adegan ke `progress * 1.35` atau rumus
+  persentase durasi lain — itulah penyebab adegan selesai duluan.
+- **Periksa sebelum unggah**: untuk setiap jawaban, cetak `akhir_suara`, `akhir_motion`, dan `ketukan_terakhir`.
+  Gagal bila `akhir_motion < akhir_suara` atau `akhir_suara − ketukan_terakhir > 1,0`. Perbaiki lalu render ulang.
+  Tulis hasilnya ringkas di `log` pesanan.
 
 **5. Bagian motion — satu-satunya tempat teks.** Satu adegan untuk satu jawaban (2–4 ketukan), ditambah pembuka dan penutup.
 Ikuti bagian **"Bahasa editing motion"** dan pakai alat di `gerak.py` (kanvas halus 2x, `krom`, `judul`, `caption`,

@@ -111,6 +111,45 @@ def split_voice(a, lines, sr=SR, thr=None):
     return [((s if i == 0 else G[i - 1][1]), (en if j == m + 1 else G[j - 1][0])) for i, j in path]
 
 
+def word_times(seg, text, sr=SR, min_gap=.12):
+    """Perkiraan waktu tiap kata di SATU baris suara (tanpa biaya, dari energi suara).
+    Pulau bicara dipisah jeda >= min_gap detik; kata dibagi ke pulau sebanding jumlah hurufnya
+    (jeda paling cocok dengan tanda baca), lalu di dalam pulau sebanding panjang kata.
+    Hasil: list (kata, mulai, selesai) dalam detik relatif awal segmen. Pakai untuk caption
+    karaoke DAN pemicu ketukan motion — jangan membagi rata durasi baris."""
+    import re
+    ws = text.split()
+    if not ws: return []
+    e = envelope(seg, sr); thr = max(.006, float(np.percentile(e, 60)) * .35); on = e > thr
+    isl = []; i = 0; n = len(on)
+    while i < n:
+        if on[i]:
+            j = i
+            while j < n and (on[j] or (j + int(min_gap * 100) < n and on[j:j + int(min_gap * 100)].any())): j += 1
+            isl.append([i * .01, j * .01]); i = j
+        else: i += 1
+    if not isl: isl = [[0, len(seg) / sr]]
+    L = np.array([max(1, len(re.sub(r'\W', '', w))) for w in ws], float)
+    # batas kata kandidat: setelah tanda baca diberi bobot
+    brk = [1.0 if re.search(r'[,.;:?!]$', w) else 0. for w in ws]
+    k = len(isl)
+    if k > len(ws): isl = [[isl[0][0], isl[-1][1]]]; k = 1
+    # tentukan kata pertama tiap pulau: pilih indeks dengan kumulatif huruf paling dekat proporsi durasi pulau
+    dur = np.array([b - a for a, b in isl]); cum = np.cumsum(dur) / dur.sum()
+    cl = np.cumsum(L) / L.sum(); starts = [0]
+    for q in cum[:-1]:
+        cand = range(starts[-1] + 1, len(ws) - (k - len(starts)) + 1)
+        best = min(cand, key=lambda j: abs(cl[j - 1] - q) - .08 * brk[j - 1]) if len(cand) else starts[-1] + 1
+        starts.append(best)
+    starts.append(len(ws)); out = []
+    for (a, b), s0, s1 in zip(isl, starts[:-1], starts[1:]):
+        if s1 <= s0: continue
+        w = L[s0:s1]; t = a
+        for idx, x in zip(range(s0, s1), w):
+            d = (b - a) * x / w.sum(); out.append((ws[idx], round(t, 3), round(t + d, 3))); t += d
+    return out
+
+
 def voice_segments(path, lines, pad=(.04, .08)):
     """Muat VO, normalkan, potong per baris. Hasil list dict {text, audio, dur, env}."""
     a = normalize(load_wav(path))
