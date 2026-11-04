@@ -152,3 +152,10 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
   kecuali konsep yang dipilih memang pixel.
 
 Kamu boleh `pip install --break-system-packages` pustaka lain (pycairo, moviepy, dsb.) bila perlu.
+
+## Pelajaran bulanan (wajib dibaca sebelum merancang)
+
+Jers menekan "Pelajari laporan" di jendela Laporan Konten setiap tanggal 4. Hasilnya disimpan di dokumen **`pelajaran`** (collection `data/users/me`, via `ArtifactData` action `get`).
+- Jika dokumen ada dan hari ini <= tanggal di field `sampai`, baca `aturan` untuk agenmu (Rusdi & Bagas, Herman & Sonya, Nabila, atau Nadine), plus `kenapa_menang` dan `kenapa_gagal`. Terapkan sebagai aturan tambahan: ulangi pola yang menang, hindari pola yang gagal.
+- Jika tidak ada atau sudah lewat `sampai`, abaikan dan kerjakan seperti biasa. Jangan menyebut pelajaran ini di caption atau naskah.
+- Jumlah contoh per akun sedikit, jadi perlakukan aturan sebagai arah, bukan larangan mutlak.

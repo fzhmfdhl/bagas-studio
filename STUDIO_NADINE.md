@@ -186,3 +186,10 @@ Kerjakan tanpa bertanya, lalu selesai. Jangan mengubah isi repo; file kerja taru
    `{"diperbarui":"ISO 8601 +08:00","ringkas":"1-2 kalimat santai ala Nadine","catatan":[{"tanggal":"YYYY-MM-DD","temuan":"...","sumber":"URL","status":"terverifikasi|dugaan","berubah":false}],"saran":["tindakan konkret untuk akun @jerapahmerah_, maksimal 4"]}`
    Maksimal 30 catatan terbaru. Jangan mengklaim pasti kalau cuma dugaan. Jangan menyarankan trik yang melanggar aturan Threads/Meta.
 6. Akhiri dengan ringkasan satu paragraf berisi temuan terpenting. Tanpa notifikasi kalau tidak ada yang baru.
+
+## Pelajaran bulanan (wajib dibaca sebelum merancang)
+
+Jers menekan "Pelajari laporan" di jendela Laporan Konten setiap tanggal 4. Hasilnya disimpan di dokumen **`pelajaran`** (collection `data/users/me`, via `ArtifactData` action `get`).
+- Jika dokumen ada dan hari ini <= tanggal di field `sampai`, baca `aturan` untuk agenmu (Rusdi & Bagas, Herman & Sonya, Nabila, atau Nadine), plus `kenapa_menang` dan `kenapa_gagal`. Terapkan sebagai aturan tambahan: ulangi pola yang menang, hindari pola yang gagal.
+- Jika tidak ada atau sudah lewat `sampai`, abaikan dan kerjakan seperti biasa. Jangan menyebut pelajaran ini di caption atau naskah.
+- Jumlah contoh per akun sedikit, jadi perlakukan aturan sebagai arah, bukan larangan mutlak.
