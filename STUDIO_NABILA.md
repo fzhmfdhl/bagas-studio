@@ -48,26 +48,76 @@ Jers memilih pilar **sebelum** kamu riset, lewat tombol di tab JERSTALK Kantor A
 
 Pesanan harian yang kamu buat sendiri (tidak ada pesanan hari ini) memakai `pilar: "bisnis"`. Jangan menebak sendiri memilih konspirasi.
 
-### Pembicaraan Dewasa (pilar `konspirasi`)
+### Pembicaraan Dewasa (pilar `konspirasi`) — DIKUNCI oleh Jers, 5 Nov 2026
+
+Acuan visual (moodboard yang disetujui Jers): `https://claude.ai/artifact/CCxuy3TyTRWHCVZkmiXwg9`.
+Papan "Yang dikunci di semua konsep" di sana adalah aturan; tiga papan contoh (Arsip Rahasia, Benang Merah, Lampu Sorot) **hanya contoh**, bukan template.
+Alat khusus segmen ini: `examples/nabila_podcast/dewasa.py` (musik, hentakan, warna label, pose angguk).
 
 "Dewasa" artinya obrolan orang dewasa yang penasaran dan kritis: nada tenang, agak gelap, penuh tanda tanya.
 **Bukan** konten seksual, vulgar, atau menakut-nakuti. Tidak ada kata kasar.
 
-**Yang berubah dari aturan bisnis:**
-- **Durasi 90–180 detik** (bukan 30–90). Jangan lebih dari 180.
-- **Naskah 8–12 pasang** tanya-jawab, total **280–450 kata**. Jawaban J boleh sampai **30 kata** dan 1–3 kalimat. Pertanyaan N tetap pendek (maks 8 kata), kecuali hook.
-- **Hook wajib: pertanyaan pertama N diawali persis "Tau nggak Jers, kalau ..."** lalu satu fakta yang mengejutkan dan *bisa diperiksa* (bukan klaim liar).
-  Tetap satu kalimat yang bikin orang berhenti menggeser dalam 2 detik. Contoh bentuk: "Tau nggak Jers, kalau pemerintah pernah benar-benar merencanakan serangan palsu ke warganya sendiri?"
-  (contoh bentuk saja, jangan dipakai mentah; topiknya harus kamu riset dan buktikan).
-- **Nama segmen "Pembicaraan Dewasa" wajib tampil**: di kartu pembuka (di bawah/bersama wordmark JERSTALK), di `naskah.judul` tidak perlu, di caption sebagai tagline, dan satu tagar `#PembicaraanDewasa`.
-- **Palet dan metafora visual**: arah gelap dan misterius (arsip, berkas dicoret, papan petunjuk, peta, lampu sorot) tetapi tetap lewat tahap konsep dan tidak boleh sama dengan 6 entri terakhir `gaya_riwayat_tok`.
+#### 1. Sistem bicara: satu bercerita, satu mendengarkan (BUKAN tanya-jawab)
 
-**Susunan naskah yang dipakai:**
-1. Hook "Tau nggak Jers, kalau ..." (fakta mengejutkan yang terdokumentasi).
+Field `pembuka` di pesanan (`"jers"` atau `"nabila"`) dipilih Jers di tombol request. Kosong berarti `"jers"`.
+- **`pembuka: "jers"`** → baris pertama Jers, diawali persis **"Kamu tau nggak, Nab, ..."**. **Seluruh cerita dibawakan Jers.**
+  Nabila hanya mengangguk dan memberi respons pendek.
+- **`pembuka: "nabila"`** → baris pertama Nabila, diawali persis **"Tau nggak Jers, kalau ..."**. **Seluruh cerita dibawakan Nabila.**
+  Jers hanya mengangguk dan memberi respons pendek.
+- Baris pertama adalah hook: setelah kalimat pembuka di atas, satu fakta mengejutkan yang **bisa diperiksa**. Terdengar di atas kartu judul (cold open).
+- **Respons pendengar: 1–5 kata**, 6–10 kali sepanjang episode, di sela cerita. Contoh: "Hah, serius?", "Terus?", "Ngeri juga ya.", "Masa sih?", "Oke, oke.", "Nah ini.".
+  Respons tidak boleh menambah informasi baru dan tidak boleh berupa pertanyaan panjang. Respons terakhir boleh "Menurut kalian gimana?" sebelum penutup pencerita.
+- Bentuk `naskah.baris`: `[{s:"J"|"N", t:"kalimat", peran:"cerita"|"respons"}]`. Simpan juga `naskah.pembuka`.
+- Baris cerita: 1–3 kalimat, **maksimal 35 kata** per baris, sehingga satu baris = satu kartu motion.
+- Total cerita **280–420 kata**, durasi akhir **90–180 detik**. Jangan lebih dari 180.
+
+#### 2. Gambar dan pose
+
+- Pose pencerita saat bicara: seperti biasa (Jers 0/1, Nabila 0/2 bergantian).
+- **Pendengar**: pose tenang (`DIAM` di `dewasa.py`: Jers 2, Nabila 1) dan **mengangguk** dengan pose 3 (`ANGGUK`), lewat `dewasa.dengar(who, t, angguk_pada)`.
+  Pose 3 sudah ada di `assets/sprites/jers_c_3.png` dan `nabila_c_3.png` dan dimuat `panggung.py`.
+- Saat respons pendengar terdengar: potong ke shot pendengar, dia mengangguk sekali di awal respons, lalu kembali ke pencerita.
+- Di sela baris cerita yang panjang boleh disisipkan **shot reaksi bisu** pendengar mengangguk (0,6–0,9 dtk), paling banyak sekali tiap tiga baris cerita.
+- Baris cerita mengikuti pola biasa: wajah pencerita 0,7 detik lalu kartu motion sampai baris habis (sekitar 60% motion, 40% bicara).
+
+#### 3. Kerapian kartu (Jers sangat tegas soal ini)
+
+- **Tidak ada elemen miring.** Dilarang memutar kartu, catatan, stempel, label, ikon, atau teks (tidak ada `rotate`, tidak ada `rot` selain 0).
+  Gerak masuk boleh geser lurus, pudar, atau sapuan, tetapi posisi akhirnya selalu tegak dan sejajar grid.
+- **Grid**: tepi kiri dan kanan isi di x = **144** dan x = **936**. Penghitung bab di pojok kiri atas (y ≈ 300).
+- **Jarak**: antarblok **48 px**, di dalam blok **24 px**, padding dalam kotak 48 px. Konsisten di semua kartu satu episode.
+- **Huruf**: paling banyak **dua** keluarga untuk judul dan isi, ditambah satu huruf **mono** untuk label, penghitung bab, dan data arsip. Ukuran dari skala tetap (mis. 32 / 44 / 64 / 92 / 140), tidak boleh ukuran acak.
+- Garis penghubung (benang, panah) **lurus atau bersudut siku**, tidak melengkung.
+- `cek_kartu` tetap wajib lulus.
+
+#### 4. Elemen tetap di semua konsep
+
+- **Lockup** kartu pembuka: wordmark kecil **JERSTALK** di atas **PEMBICARAAN DEWASA** (kata DEWASA paling besar), lalu judul topik. Kalimat pembuka ("Kamu tau nggak, Nab ..." atau "Tau nggak Jers, kalau ...") tampil sebagai teks kecil di bawahnya.
+- **Label klaim**: setiap klaim di layar membawa satu label `TERBUKTI` / `DIKLAIM` / `BELUM TERBUKTI` dengan warna dari `dewasa.LABEL` (hijau / kuning / merah). Bentuknya boleh ikut konsep (stempel tegak, stiker, teks terminal), warnanya tidak.
+- **Alur lima bab** dengan penghitung `0X / 05`: 01 Hook · 02 Yang terbukti · 03 Teori yang beredar · 04 Fakta atau teori · 05 Penutup jujur.
+- Penutup tetap memuat ajakan berkomentar dan **@jerapahmerah_**.
+- Nama segmen di caption sebagai tagline dan tagar `#PembicaraanDewasa`.
+
+#### 5. Konsep visual: BARU di setiap episode
+
+- Tiap episode merancang **konsep sendiri** (palet, metafora benda, cara label muncul), tetap dalam keluarga "gelap dan misterius" dan **tunduk pada bagian 3 dan 4**.
+  Tahap KONSEP MOTION tetap berlaku: dua konsep, masing-masing tiga frame kunci, Jers memilih.
+- Tidak boleh sama dengan 6 entri terakhir `gaya_riwayat_tok`. Tiga contoh di moodboard boleh jadi titik berangkat, tetapi jangan disalin mentah.
+- Saat menulis `gaya_riwayat_tok`, awali namanya dengan `PD:` supaya terlihat ini konsep Pembicaraan Dewasa.
+
+#### 6. Musik dan suara
+
+- Latar wajib `dewasa.musik_misteri(DUR, seed=<angka unik per episode, mis. dari id pesanan>)`: dengung rendah, denyut seperti detak jantung yang makin rapat di akhir, nada tinggi sumbang yang menggantung. **Jangan pakai latar episode bisnis** (bass ringan + hi-hat).
+- Hentakan `dewasa.stinger(...)`: `'buka'` saat kartu judul muncul, `'terbukti'` / `'diklaim'` / `'belum'` tepat saat label klaim mendarat.
+- Duck musik saat ada suara dengan `depth=.35`. Suara harus selalu jelas di atas musik.
+- Suara tetap ElevenLabs dengan voice yang sama. Buat semua baris cerita dan semua respons dalam sesi yang sama; simpan id-nya di `suara` seperti biasa. Jangan membuat ulang suara untuk mencoba lagi.
+
+**Susunan isi cerita:**
+1. Hook (kalimat pembuka + fakta mengejutkan yang terdokumentasi).
 2. Apa yang **terbukti** (dokumen, putusan, arsip yang dibuka, pengakuan resmi).
 3. Teori yang beredar di masyarakat dan kenapa orang percaya.
 4. Yang **belum ada buktinya** atau sudah dibantah. Sebutkan terang-terangan.
-5. Penutup jujur: apa yang bisa kita yakini, apa yang tidak. Ajakan berkomentar: "menurut kamu gimana?"
+5. Penutup jujur: apa yang bisa kita yakini, apa yang tidak, lalu ajakan berkomentar.
 
 **Batas yang tidak boleh dilanggar (aturan emas jujur tetap berlaku, di sini lebih ketat):**
 - **Pisahkan fakta dari teori di setiap klaim.** Pakai kata "terdokumentasi", "diklaim", "belum terbukti". Jangan pernah membuat teori terdengar seperti fakta.
@@ -213,6 +263,10 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 
 ---------------------------------------------------------------------------------------------------
 ### Tahap NASKAH (dari `antre`)
+
+> **Pilar `konspirasi`:** langkah 2–3 di bawah (tanya-jawab 5–7 pasang) TIDAK berlaku. Pakai format **Pembicaraan Dewasa**
+> (satu bercerita, satu merespons; lihat bagian "Pilar konten"), dengan pencerita sesuai field `pembuka`.
+
 
 0. **Cek dulu apakah ini request Jers.** Kalau `sumber == "request"`, field `topik` sudah berisi permintaannya
    dan `catatan` berisi arahannya. **Pakai topik itu, jangan ganti.** Riset secukupnya hanya untuk memastikan isinya benar

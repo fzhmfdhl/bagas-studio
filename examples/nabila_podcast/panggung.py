@@ -28,8 +28,9 @@ def A(c,a):return (c[0],c[1],c[2],int(max(0,min(1,a))*255))
 def ease(x):return 1-(1-max(0.,min(1.,x)))**3
 
 WALL=Image.open(R+'/assets/office/podcast_wall2.png').convert('RGB')
-JC=[Image.open(R+'/assets/sprites/jers_c_%d.png'%i) for i in range(3)]
-NC=[Image.open(R+'/assets/sprites/nabila_c_%d.png'%i) for i in range(3)]
+# pose 0-2 seperti biasa; pose 3 = tenang + kepala menunduk (angguk), dipakai segmen Pembicaraan Dewasa (lihat dewasa.py)
+JC=[Image.open(R+'/assets/sprites/jers_c_%d.png'%i) for i in range(4)]
+NC=[Image.open(R+'/assets/sprites/nabila_c_%d.png'%i) for i in range(4)]
 import glob as _g
 ICDIR=os.environ.get('NABILA_ICONS','ic')   # folder PNG hasil `python3 toolkit/lucide.py ic/ "nama:warna" ...`
 IC={os.path.basename(p)[:-4]:Image.open(p).convert('RGBA') for p in _g.glob(os.path.join(ICDIR,'*.png'))}
