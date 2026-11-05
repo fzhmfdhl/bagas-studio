@@ -35,8 +35,49 @@ Karena itu **pertanyaan pertama harus yang paling menohok** — itulah hook epis
 - **Ikon di kartu motion memakai Lucide** (`assets/lucide/`, 1890 ikon). Garis tipis, satu warna, tanpa kotak.
   Jangan memakai potongan foto sebagai ikon — pernah dicoba dan ditolak Jers.
 - **Tidak ada mikrofon di layar.** Pernah dicoba dan ditolak Jers.
-- **Tema:** bisnis dan AI. Praktis, untuk orang yang menjalankan usaha.
-- **Durasi:** 30–90 detik. Jangan pernah lebih dari 90 detik.
+- **Tema:** dua pilar. **Bisnis dan AI** (praktis, untuk orang yang menjalankan usaha) dan **konspirasi** lewat segmen *Pembicaraan Dewasa* (lihat bagian "Pilar konten"). Pilarnya ada di field `pilar` pesanan.
+- **Durasi:** pilar bisnis 30–90 detik, jangan pernah lebih dari 90. Pilar konspirasi 90–180 detik, jangan pernah lebih dari 180.
+
+---------------------------------------------------------------------------------------------------
+## Pilar konten (field `pilar` di pesanan)
+
+Jers memilih pilar **sebelum** kamu riset, lewat tombol di tab JERSTALK Kantor Agent. Hasilnya ada di field `pilar` pesanan:
+- **`bisnis`** (atau field kosong): AI dan bisnis. Semua aturan di dokumen ini berlaku apa adanya (30–90 detik).
+- **`konspirasi`**: segmen khusus bernama **Pembicaraan Dewasa**. Aturan di bawah ini menimpa aturan bisnis **hanya di bagian yang disebut**;
+  sisanya (suara, adegan, bahasa editing, kerapian, jadwal) tetap sama.
+
+Pesanan harian yang kamu buat sendiri (tidak ada pesanan hari ini) memakai `pilar: "bisnis"`. Jangan menebak sendiri memilih konspirasi.
+
+### Pembicaraan Dewasa (pilar `konspirasi`)
+
+"Dewasa" artinya obrolan orang dewasa yang penasaran dan kritis: nada tenang, agak gelap, penuh tanda tanya.
+**Bukan** konten seksual, vulgar, atau menakut-nakuti. Tidak ada kata kasar.
+
+**Yang berubah dari aturan bisnis:**
+- **Durasi 90–180 detik** (bukan 30–90). Jangan lebih dari 180.
+- **Naskah 8–12 pasang** tanya-jawab, total **280–450 kata**. Jawaban J boleh sampai **30 kata** dan 1–3 kalimat. Pertanyaan N tetap pendek (maks 8 kata), kecuali hook.
+- **Hook wajib: pertanyaan pertama N diawali persis "Tau nggak Jers, kalau ..."** lalu satu fakta yang mengejutkan dan *bisa diperiksa* (bukan klaim liar).
+  Tetap satu kalimat yang bikin orang berhenti menggeser dalam 2 detik. Contoh bentuk: "Tau nggak Jers, kalau pemerintah pernah benar-benar merencanakan serangan palsu ke warganya sendiri?"
+  (contoh bentuk saja, jangan dipakai mentah; topiknya harus kamu riset dan buktikan).
+- **Nama segmen "Pembicaraan Dewasa" wajib tampil**: di kartu pembuka (di bawah/bersama wordmark JERSTALK), di `naskah.judul` tidak perlu, di caption sebagai tagline, dan satu tagar `#PembicaraanDewasa`.
+- **Palet dan metafora visual**: arah gelap dan misterius (arsip, berkas dicoret, papan petunjuk, peta, lampu sorot) tetapi tetap lewat tahap konsep dan tidak boleh sama dengan 6 entri terakhir `gaya_riwayat_tok`.
+
+**Susunan naskah yang dipakai:**
+1. Hook "Tau nggak Jers, kalau ..." (fakta mengejutkan yang terdokumentasi).
+2. Apa yang **terbukti** (dokumen, putusan, arsip yang dibuka, pengakuan resmi).
+3. Teori yang beredar di masyarakat dan kenapa orang percaya.
+4. Yang **belum ada buktinya** atau sudah dibantah. Sebutkan terang-terangan.
+5. Penutup jujur: apa yang bisa kita yakini, apa yang tidak. Ajakan berkomentar: "menurut kamu gimana?"
+
+**Batas yang tidak boleh dilanggar (aturan emas jujur tetap berlaku, di sini lebih ketat):**
+- **Pisahkan fakta dari teori di setiap klaim.** Pakai kata "terdokumentasi", "diklaim", "belum terbukti". Jangan pernah membuat teori terdengar seperti fakta.
+- **Riset dulu dengan 4–6 pencarian web** dan pastikan bagian "terbukti" benar-benar punya sumber (arsip resmi, putusan pengadilan, media kredibel). Tidak boleh mengarang dokumen, kutipan, angka, atau nama saksi.
+- **Prioritaskan kasus yang terdokumentasi atau misteri sejarah**, misalnya program rahasia pemerintah yang kemudian diakui, dokumen yang dideklasifikasi, hilangnya benda atau orang yang tidak terpecahkan, mitos urban, atau teori budaya populer. Fokus pada "kenapa orang percaya" dan "apa yang sebenarnya diketahui".
+- **Dilarang:** teori yang menyalahkan suku, agama, ras, atau kelompok etnis; teori kesehatan (vaksin, obat, penyakit) yang bisa membahayakan orang; teori politik terkini, pemilu, atau politisi yang masih menjabat; menuduh orang atau perusahaan nyata melakukan kejahatan tanpa putusan; tragedi dengan korban atau keluarga yang masih hidup (mis. serangan teror); ajakan melakukan sesuatu yang berbahaya.
+- Kalau topik dari Jers (`sumber == "request"`) masuk wilayah yang dilarang di atas, **jangan dikerjakan apa adanya**: ubah sudutnya ke "kenapa teori ini beredar dan apa faktanya", dan tulis alasannya di `log`. Kalau tidak bisa dibuat aman, set `status: "gagal"` dengan `log` yang menjelaskan.
+- Tambahkan di akhir caption: "Ini pembahasan teori dan sejarah, bukan klaim pasti." Sisanya caption seperti biasa.
+
+Untuk pesanan harian (`sumber == "harian"`) pilar konspirasi: pilih **satu** topik dari riset, jangan mengulang 10 pesanan `tok` terakhir.
 
 ---------------------------------------------------------------------------------------------------
 ## Aturan emas
@@ -140,7 +181,7 @@ Pesanan: dokumen `st_<id>` dengan `jenis: "studio"` dan `brand: "tok"`.
 | `gagal` | ada galat; `log` menjelaskan | — |
 
 Field pesanan:
-- `topik`, `sudut`, `catatan` (arahan Jers), `sumber` — `harian` (kamu riset sendiri) atau `request` (topik dari Jers, lewat tab "Request topik" di Kantor Agent)
+- `pilar` (`bisnis` atau `konspirasi`), `topik`, `sudut`, `catatan` (arahan Jers), `sumber` — `harian` (kamu riset sendiri) atau `request` (topik dari Jers, lewat tab "Request topik" di Kantor Agent)
 - `naskah`: `{judul, baris: [{s:"J"|"N", t:"kalimat"}], kata, perkiraan}` — **dialog**, bukan monolog
 - `suara`: `{flow_id, J:{session_id, generation_id}, N:{session_id, generation_id}}` — simpan supaya revisi tidak membuat suara baru
 - `video`: **nama field ini pasti, jangan diubah-ubah** —
