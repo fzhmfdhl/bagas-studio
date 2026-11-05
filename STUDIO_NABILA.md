@@ -101,7 +101,9 @@ Field `pembuka` di pesanan (`"jers"` atau `"nabila"`) dipilih Jers di tombol req
 #### 5. Konsep visual: BARU di setiap episode
 
 - Tiap episode merancang **konsep sendiri** (palet, metafora benda, cara label muncul), tetap dalam keluarga "gelap dan misterius" dan **tunduk pada bagian 3 dan 4**.
-  Tahap KONSEP MOTION tetap berlaku: dua konsep, masing-masing tiga frame kunci, Jers memilih.
+  **Opsi dulu, baru motion (perintah Jers, 5 Nov 2026):** tahap KONSEP MOTION wajib untuk setiap episode Pembicaraan Dewasa —
+  dua konsep, masing-masing tiga frame kunci diam (kartu pembuka, satu kartu bukti dengan label, satu kartu fakta atau teori), lalu status `pilih`.
+  **Dilarang merender motion atau video penuh sebelum Jers memilih.** Kalau Jers menolak keduanya, ajukan dua opsi baru.
 - Tidak boleh sama dengan 6 entri terakhir `gaya_riwayat_tok`. Tiga contoh di moodboard boleh jadi titik berangkat, tetapi jangan disalin mentah.
 - Saat menulis `gaya_riwayat_tok`, awali namanya dengan `PD:` supaya terlihat ini konsep Pembicaraan Dewasa.
 
