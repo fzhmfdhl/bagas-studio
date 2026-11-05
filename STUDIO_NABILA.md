@@ -74,17 +74,32 @@ Field `pembuka` di pesanan (`"jers"` atau `"nabila"`) dipilih Jers di tombol req
 #### 2. Gambar dan pose
 
 - Pose pencerita saat bicara: seperti biasa (Jers 0/1, Nabila 0/2 bergantian).
-- **Pendengar**: pose tenang (`DIAM` di `dewasa.py`: Jers 2, Nabila 1) dan **mengangguk** dengan pose 3 (`ANGGUK`), lewat `dewasa.dengar(who, t, angguk_pada)`.
-  Pose 3 sudah ada di `assets/sprites/jers_c_3.png` dan `nabila_c_3.png` dan dimuat `panggung.py`.
-- Saat respons pendengar terdengar: potong ke shot pendengar, dia mengangguk sekali di awal respons, lalu kembali ke pencerita.
-- Di sela baris cerita yang panjang boleh disisipkan **shot reaksi bisu** pendengar mengangguk (0,6–0,9 dtk), paling banyak sekali tiap tiga baris cerita.
-- Baris cerita mengikuti pola biasa: wajah pencerita 0,7 detik lalu kartu motion sampai baris habis (sekitar 60% motion, 40% bicara).
+- **TIDAK ADA angguk, TIDAK ADA shot pendengar bisu** (Jers menolaknya, 6 Nov 2026: "jelek sekali, buat seperti video biasa").
+  Pose 3 (angguk) dan `dewasa.dengar` jangan dipakai. Tampilan bicara sama seperti video biasa:
+  - Respons pendengar (1–5 kata) tampil **penuh di shot pendengar yang sedang bicara** (pose bicara bergantian tiap 0,42 dtk), selama kata-katanya terdengar.
+  - Baris cerita: wajah pencerita **bicara** 1,1 detik di awal, lalu kartu motion sampai kata terakhir. Baris yang lebih dari sekitar 9,5 detik mendapat **satu potongan wajah bicara 1,25 detik di batas kalimat tengah**.
+  - Tidak ada potongan hening, tidak ada transisi memudar yang menampakkan wajah buram di belakang teks (potong keras saja).
+- Teks di kartu tidak boleh menimpa teks lain pada frame mana pun yang lengkap: jalankan `cek_tumpuk` (`kartu_dewasa.py`) selain `cek_gerak`.
+
+#### 2b. Subtitle (caption pill) HARUS cocok dengan suara (Jers menolak v1, 6 Nov 2026)
+- Jangan memakai `word_times` (perkiraan dari energi suara) untuk segmen ini: pada rekaman panjang hasilnya meleset beberapa detik.
+- Ambil **waktu kata asli**: unggah mp3 tiap penutur ke flow dengan `creative_attach_reference_file`, lalu `creative_transcribe_audio` (`eleven_scribe_v1`),
+  dan unduh `words_download_url` (file words.json berisi start dan end per kata). Biayanya kecil dibanding suara.
+- Cocokkan kata naskah ke kata transkrip dengan `difflib.SequenceMatcher`, sisanya diinterpolasi (lihat `align()` di `episode_dewasa_contoh.py`).
+  Caption menampilkan **kata naskah** (ejaan benar), bukan hasil transkrip.
+- Frasa caption berhenti di tanda baca akhir kalimat dan paling lebar 540 px, jangan melewati batas grid.
+- Batas paragraf pada rekaman penutur diambil dari waktu mulai kata pertama tiap baris di transkrip, bukan dari deteksi jeda.
+
+#### 2c. Posisi (Jers menolak v1: "motionnya tidak di tengah, sedikit ke atas")
+- Isi kartu **dipusatkan otomatis** di zona 460–1296 (mesin `kartu_dewasa.py`), seluruh susunan krom di y 310, caption di y 1378, bar di y 1440.
+  Jangan menempel isi ke atas lalu membiarkan separuh bawah kosong.
+- Baris cerita mengikuti pola biasa: wajah pencerita lalu kartu motion sampai baris habis.
 
 #### 3. Kerapian kartu (Jers sangat tegas soal ini)
 
 - **Tidak ada elemen miring.** Dilarang memutar kartu, catatan, stempel, label, ikon, atau teks (tidak ada `rotate`, tidak ada `rot` selain 0).
   Gerak masuk boleh geser lurus, pudar, atau sapuan, tetapi posisi akhirnya selalu tegak dan sejajar grid.
-- **Grid**: tepi kiri dan kanan isi di x = **144** dan x = **936**. Penghitung bab di pojok kiri atas (y ≈ 300).
+- **Grid**: tepi kiri dan kanan isi di x = **180** dan x = **900** (sejajar krom `gerak.py`; 144/936 ditolak `cek_gerak`). Penghitung bab di pojok kiri atas.
 - **Jarak**: antarblok **48 px**, di dalam blok **24 px**, padding dalam kotak 48 px. Konsisten di semua kartu satu episode.
 - **Huruf**: paling banyak **dua** keluarga untuk judul dan isi, ditambah satu huruf **mono** untuk label, penghitung bab, dan data arsip. Ukuran dari skala tetap (mis. 32 / 44 / 64 / 92 / 140), tidak boleh ukuran acak.
 - Garis penghubung (benang, panah) **lurus atau bersudut siku**, tidak melengkung.
