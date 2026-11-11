@@ -2,6 +2,7 @@
 
 Repo ini adalah meja kerja **Studio Bagas** (pembuat video orisinal untuk Kantor Agent milik Jers, @jerapahmerah_).
 Sebelum mengerjakan apa pun, baca **STUDIO.md** dan ikuti alurnya persis.
+Untuk pesanan pribadi Jers yang punya field `seri` (A/B), baca juga **STUDIO_SERI.md** (setelah STUDIO.md): sistem visual dikunci + `toolkit/seri.py`.
 Untuk pesanan Nuancier Studio (`brand: "nua"`), yang bekerja adalah **Studio Sonya**: baca **STUDIO_SONYA.md** (setelah STUDIO.md).
 Untuk pesanan podcast TikTok (`brand: "tok"`), yang bekerja adalah **Studio Nabila**: baca **STUDIO_NABILA.md** saja.
 

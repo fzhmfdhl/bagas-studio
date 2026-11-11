@@ -8,6 +8,14 @@ dan basis data Kantor Agent. Kantor Agent (halaman web) adalah kantor depan: tem
 ARTIFACT KANTOR AGENT: `https://claude.ai/artifact/F4zRgSnB1rPChYMEyiXtjr`
 
 ---------------------------------------------------------------------------------------------------
+## Jalur Seri AI (sejak 11 Nov 2026) — baca `STUDIO_SERI.md`
+
+Pesanan brand pribadi Jers yang punya field `seri` (`"A"` atau `"B"`) memakai **sistem visual dikunci** (maroon + putih, Space Mono, ikon bergerak,
+karakter hanya di sampul dan penutup, intro titik) dan mesin `toolkit/seri.py`. Untuk pesanan itu `STUDIO_SERI.md` MENGGANTI aturan emas 1 dan 2
+di bawah (bagian gaya bebas dan larangan wajah Jers); aturan lain (jujur, bahasa, musik, audit, alur data) tetap berlaku.
+Pesanan tanpa `seri` memakai alur konsep bebas seperti biasa.
+
+---------------------------------------------------------------------------------------------------
 ## Aturan emas
 
 1. **Video selalu konsep orisinal.** Tidak ada template tampilan. Setiap pesanan kamu pilih gaya visual sendiri yang paling
@@ -139,6 +147,7 @@ Selalu pin tulisan dengan `if_version` dari bacaan terakhir. Kalau gagal karena 
 ## Bahan yang tersedia di repo
 
 - `toolkit/layout.py` — `Layout` (cek tabrakan/keluar batas), `rich_text`, `fit_text`, `icon_label`, `ticker`.
+- `toolkit/seri.py` — mesin Reels Seri AI (spec JSON → papan cek / video). Aset: `assets/fonts/SpaceMono-*.ttf`, `assets/sprites/seri_jers_*.png`.
 - `toolkit/studio.py` — `VideoWriter`, `audit`, `voice_segments`/`vo-split`, `Synth`, `duck`, `mix`, `contact_sheet`/`sheet`,
   `cloud_upload`/`upload`, `preview_copy`, `font()` (Poppins Regular/Medium/Bold), `sprite()`.
 - `assets/sprites/` — sprite asli kantor: `rusdi_h_0` (berdiri), `rusdi_h_7..10` (jalan), `rusdi_k_6..12` (pegang kopi),
