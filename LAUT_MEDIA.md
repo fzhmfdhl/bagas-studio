@@ -72,13 +72,12 @@ Satu-satunya mesin: `python3 toolkit/buzzora.py spek.json keluaran/` (baca docst
 - Spek:
   - `varian`: v1..v6 sesuai giliran.
   - `akun`: dari `laut_cfg` (bawaan `@buzzora.feed`).
-  - **Semua teks slide BAHASA INGGRIS** (sejak 12 Nov 2026; label tetap seperti "Read caption", "Source" sudah otomatis dari mesin).
-  - `kategori`: label pendek bahasa Inggris: "Breaking", "Economy", "Politics", "Viral", "Tech", "Sports", "Entertainment", "Weather",
-    "Makassar", "Jakarta", "Bali", dll.
-  - `judul`: 3-9 kata bahasa Inggris, fakta terpenting, gaya media cepat (mis. "Rice prices rise in 12 provinces"). Otomatis huruf besar.
-    Sebut "Indonesia"/nama kota bila pembaca internasional perlu konteks tempat.
-  - `sorot`: satu kata/frasa pendek yang ADA di `judul` dan paling penting (mis. "rise", "earthquake", "official"). Dipakai v1 dan v4.
-  - `sub`: satu kalimat bahasa Inggris, maks ~18 kata (fakta + angka bila ada; rupiah boleh disertai kira-kira USD bila sumbernya menyebut).
+  - **Teks di slide (copy visual) tetap BAHASA INDONESIA.** Hanya caption yang bahasa Inggris (keputusan Jers 12 Nov 2026).
+  - `kategori`: label pendek bahasa Indonesia: "Berita Ekonomi", "Berita Viral", "Berita Nasional", "Kesehatan", "Teknologi",
+    "Olahraga", "Hiburan", "Cuaca", "Kabar Makassar", dll.
+  - `judul`: 3-9 kata bahasa Indonesia, fakta terpenting, gaya media cepat (mis. "Harga beras naik di 12 provinsi"). Otomatis huruf besar.
+  - `sorot`: satu kata/frasa pendek yang ADA di `judul` dan paling penting (mis. "naik", "gempa", "resmi"). Dipakai v1 dan v4.
+  - `sub`: satu kalimat bahasa Indonesia, maks ~18 kata (fakta + angka bila ada).
   - `sumber`: nama sumber utama yang singkat (mis. "Kompas", "BMKG").
 - **Tanpa foto dari internet.** Sampul memakai latar grafis maroon; Jers menempelkan foto sendiri di kantor (tombol "Pasang foto")
   memakai `slide_01_overlay.png` + `foto.json`. Isi `foto_saran`: satu kalimat foto apa yang cocok (mis. "suasana antrean di pasar induk").
@@ -87,7 +86,7 @@ Satu-satunya mesin: `python3 toolkit/buzzora.py spek.json keluaran/` (baca docst
   (kutipan berbahasa Indonesia diterjemahkan setia dan ditandai "(translated)"); 3) "Source: ..." (nama media/lembaga);
   4) satu pertanyaan netral untuk komentar; 5) "Follow @buzzora.feed for the fastest updates.";
   6) 3-6 hashtag bahasa Inggris yang relevan (selalu sertakan #buzzora; tambahkan #indonesia bila beritanya dari Indonesia). Tanpa emoji. Maks 2.000 huruf.
-  Teks di slide tetap mengikuti desain yang dikunci (jangan diubah) sampai Jers memutuskan lain.
+  Teks di slide tetap bahasa Indonesia; hanya caption yang bahasa Inggris.
 
 ## 5. Render dan periksa
 1. Kerjakan di direktori sementara (jangan mengubah repo). `python3 toolkit/buzzora.py spek.json out/`.
