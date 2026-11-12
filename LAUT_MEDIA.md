@@ -9,6 +9,22 @@ Media itu soal cepat **dan** benar. Lebih baik tidak menghasilkan apa-apa daripa
 
 ARTIFACT KANTOR AGENT: `https://claude.ai/artifact/F4zRgSnB1rPChYMEyiXtjr` (ArtifactData, collection `data/users/me`).
 
+## 0. Pesanan Jers (kerjakan LEBIH DULU)
+`ArtifactData query` collection `data/users/me`, `where: [["jenis","==","laut_req"],["status","==","antre"]]`.
+Untuk tiap pesanan (paling lama lebih dulu; pesanan tetap dikerjakan walau `laut_cfg.aktif` false):
+1. `ArtifactData update` pesanan itu: `{"status":"proses"}` (pakai `if_version`).
+2. `topik` = permintaan Jers (bisa berisi link). Riset dan **verifikasi** seperti bagian 2 dan aturan redaksi bagian 3.
+   Bila tidak bisa dipastikan kebenarannya atau melanggar aturan redaksi: update `{"status":"gagal","catatan":"alasan singkat untuk Jers"}`, lanjut.
+3. Bila ada `foto` (bentuk `/_blob/<id>`): unduh dengan alat `Artifact`, `action: "read"`, `url` artifact kantor, `path` = `<id>`
+   (32 huruf hex setelah `/_blob/`). Hasil tersimpan di berkas lokal; berikan path berkas itu sebagai argumen ketiga
+   `python3 toolkit/buzzora.py spek.json out/ <foto>` sehingga sampul langsung memakai foto Jers.
+   Pilih varian berikutnya sesuai giliran seperti biasa.
+4. Lanjutkan bagian 4-6 (caption, render, periksa, unggah, simpan `lm_...`). Di dokumen `lm_...` tambahkan `"pesanan":"<id pesanan>"`
+   dan `"foto_jers":true` bila foto dipakai.
+5. Update pesanan: `{"status":"selesai","hasil":"<id lm_...>"}`.
+Pesanan tidak dihitung dalam batas `maks`. Setelah semua pesanan selesai, lanjutkan sesi pemantauan biasa (bagian 1 dst) **hanya bila**
+sesi ini dipicu jadwal; bila sesi dipicu oleh pesanan (teks pemicu menyebut "Pesanan berita dari Jers"), selesai setelah pesanan.
+
 ## 1. Cek jam dan pengaturan
 1. Jam sekarang: `TZ=Asia/Makassar date '+%Y-%m-%d %H:%M'` (semua waktu yang kamu tulis memakai WITA, +08:00).
 2. `ArtifactData get` doc `laut_cfg`. Bila tidak ada, pakai bawaan:
