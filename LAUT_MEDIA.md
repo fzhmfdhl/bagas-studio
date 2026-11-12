@@ -79,10 +79,12 @@ Satu-satunya mesin: `python3 toolkit/buzzora.py spek.json keluaran/` (baca docst
   - `sumber`: nama sumber utama yang singkat (mis. "Kompas", "BMKG").
 - **Tanpa foto dari internet.** Sampul memakai latar grafis maroon; Jers menempelkan foto sendiri di kantor (tombol "Pasang foto")
   memakai `slide_01_overlay.png` + `foto.json`. Isi `foto_saran`: satu kalimat foto apa yang cocok (mis. "suasana antrean di pasar induk").
-- Caption = **berita lengkap**, bahasa Indonesia media yang jelas:
-  1) baris pertama judul kuat; 2) 2-4 paragraf pendek: apa, siapa, kapan, di mana, kenapa, angka penting, pernyataan resmi;
-  3) "Sumber: ..." (nama media/lembaga); 4) satu pertanyaan netral untuk komentar; 5) "Follow @buzzora.feed untuk kabar tercepat.";
-  6) 3-6 hashtag (selalu sertakan #buzzora). Tanpa emoji. Maks 2.000 huruf.
+- Caption = **berita lengkap dalam BAHASA INGGRIS** (BUZZORA adalah media multinasional; sejak 12 Nov 2026), gaya media berita yang jelas dan netral:
+  1) baris pertama headline kuat; 2) 2-4 paragraf pendek: what, who, when, where, why, angka penting, pernyataan resmi
+  (kutipan berbahasa Indonesia diterjemahkan setia dan ditandai "(translated)"); 3) "Source: ..." (nama media/lembaga);
+  4) satu pertanyaan netral untuk komentar; 5) "Follow @buzzora.feed for the fastest updates.";
+  6) 3-6 hashtag bahasa Inggris yang relevan (selalu sertakan #buzzora; tambahkan #indonesia bila beritanya dari Indonesia). Tanpa emoji. Maks 2.000 huruf.
+  Teks di slide tetap mengikuti desain yang dikunci (jangan diubah) sampai Jers memutuskan lain.
 
 ## 5. Render dan periksa
 1. Kerjakan di direktori sementara (jangan mengubah repo). `python3 toolkit/buzzora.py spek.json out/`.
