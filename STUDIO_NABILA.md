@@ -140,8 +140,19 @@ Field `pembuka` di pesanan (`"jers"` atau `"nabila"`) dipilih Jers di tombol req
 - **Pisahkan fakta dari teori di setiap klaim.** Pakai kata "terdokumentasi", "diklaim", "belum terbukti". Jangan pernah membuat teori terdengar seperti fakta.
 - **Riset dulu dengan 4–6 pencarian web** dan pastikan bagian "terbukti" benar-benar punya sumber (arsip resmi, putusan pengadilan, media kredibel). Tidak boleh mengarang dokumen, kutipan, angka, atau nama saksi.
 - **Prioritaskan kasus yang terdokumentasi atau misteri sejarah**, misalnya program rahasia pemerintah yang kemudian diakui, dokumen yang dideklasifikasi, hilangnya benda atau orang yang tidak terpecahkan, mitos urban, atau teori budaya populer. Fokus pada "kenapa orang percaya" dan "apa yang sebenarnya diketahui".
-- **Dilarang:** teori yang menyalahkan suku, agama, ras, atau kelompok etnis; teori kesehatan (vaksin, obat, penyakit) yang bisa membahayakan orang; teori politik terkini, pemilu, atau politisi yang masih menjabat; menuduh orang atau perusahaan nyata melakukan kejahatan tanpa putusan; tragedi dengan korban atau keluarga yang masih hidup (mis. serangan teror); ajakan melakukan sesuatu yang berbahaya.
-- Kalau topik dari Jers (`sumber == "request"`) masuk wilayah yang dilarang di atas, **jangan dikerjakan apa adanya**: ubah sudutnya ke "kenapa teori ini beredar dan apa faktanya", dan tulis alasannya di `log`. Kalau tidak bisa dibuat aman, set `status: "gagal"` dengan `log` yang menjelaskan.
+- **Topik tidak disensor (keputusan Jers, 12 Nov 2026).** Semua topik boleh diangkat, termasuk politik terkini, politisi yang
+  masih menjabat, tragedi yang korban atau keluarganya masih hidup (mis. penculikan aktivis 1998), dan kasus lama yang belum tuntas.
+  Jangan menolak atau menggagalkan pesanan Jers karena topiknya. Yang dijaga adalah CARA menyampaikannya:
+  - **Orang nyata:** sebut hanya yang tercatat di putusan pengadilan, temuan lembaga resmi (Komnas HAM, DPR, dll.), atau liputan
+    media kredibel, lengkap dengan sumbernya, dan sertakan bantahan atau tanggapan resmi pihak yang disebut bila ada. Tulis dugaan
+    sebagai dugaan ("menurut laporan ...", "diduga", "dibantah oleh ..."). Jangan menyimpulkan bersalah melampaui putusan.
+    (Ini juga melindungi akun Jers dari jerat pencemaran nama baik.)
+  - **Korban dan keluarga:** nada hormat. Fakta duka (orang hilang, korban) disampaikan apa adanya, tidak dijadikan lelucon atau
+    "plot twist". Boleh tetap memakai format dan stempel Pembicaraan Dewasa.
+  - **Tiga pagar tetap:** tidak menyalahkan atau memancing kebencian pada suku, agama, ras, atau kelompok; tidak menyebarkan klaim
+    kesehatan yang bisa mencelakakan orang (mis. berhenti berobat, menolak vaksin) sebagai kebenaran; tidak mengajak melakukan
+    hal berbahaya atau melanggar hukum. Topiknya tetap boleh dibahas, asal tiga hal itu tidak dilakukan.
+- Kalau sebuah klaim inti tidak punya sumber sama sekali, katakan terang-terangan "belum ada bukti" di naskah; jangan menghapus topiknya.
 - Tambahkan di akhir caption: "Ini pembahasan teori dan sejarah, bukan klaim pasti." Sisanya caption seperti biasa.
 
 Untuk pesanan harian (`sumber == "harian"`) pilar konspirasi: pilih **satu** topik dari riset, jangan mengulang 10 pesanan `tok` terakhir.
