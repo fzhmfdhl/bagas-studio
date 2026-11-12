@@ -143,7 +143,7 @@ def t_meme(sl):
     if sl.get('sub'):
         fs, l2, s2 = fit(sl['sub'].upper(), MD, W - 300, 1, 36, 24)
         d.text((70, y + 14), l2[0], font=fs, fill=WH)
-    logo(im, W - 40, TOP - 130, 64)
+    logo(im, W - 40, TOP - 82, 64)
     return im
 
 
