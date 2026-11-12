@@ -79,7 +79,7 @@ def fit(t, fn, width, max_lines, smax, smin, min_lines=1):
 
 def cap_box(f):
     """tinggi huruf kapital & offset atas (untuk menaruh kotak tepat di belakang teks)"""
-    b = f.getbbox('HXÉ')
+    b = f.getbbox('HX')
     return b[1], b[3]
 
 
@@ -159,13 +159,17 @@ def v1(sp):
     hb = len(l2) * s2 * 1.32 + 44
     hj = (len(ls) - 1) * s * 1.06 + bot - top + 28
     y = 600 + max(0, (H - 160 - 600 - (hj + 40 + hb)) / 2) - top + 14
+    PAD, GAP = 20, 30
     for i, l in enumerate(ls):
         if i == k:
-            w = tw(l, f)
-            d.rectangle((W / 2 - w / 2 - 20, y + top - 14, W / 2 + w / 2 + 20, y + bot + 14), fill=MAR)
+            y += GAP if i else 0
+            bx = d.textbbox((W / 2, y), l, font=f, anchor='ma')
+            cy = (y + top + y + bot) / 2                    # tengah huruf kapital
+            hh = (bot - top) / 2 + PAD
+            d.rectangle((bx[0] - PAD - 6, cy - hh, bx[2] + PAD + 6, cy + hh), fill=MAR)
         d.text((W / 2, y), l, font=f, fill=WH, anchor='ma')
-        y += s * 1.06
-    y = y - s * 1.06 + bot + 14 + 40
+        y += s * 1.06 + (GAP if i == k else 0)
+    y = y - s * 1.06 - (GAP if k == len(ls) - 1 else 0) + bot + 14 + 40
     d.rounded_rectangle((M + 30, y, W - M - 30, y + hb), 12, fill=WH)
     yy = y + 22
     for l in l2:
