@@ -17,10 +17,10 @@ Spek:
 {
   "varian": "v3",                    # v1..v6 (lihat VARIAN); wajib, pilih bergantian dari riwayat
   "akun": "@buzzora.feed",
-  "kategori": "Berita Ekonomi",      # label kecil (v2, v5, v6)
-  "judul": "Harga beras naik di 12 provinsi",   # 3-9 kata; otomatis HURUF BESAR
-  "sorot": "naik",                   # kata/frasa di judul yang disorot (v1: baris berisi sorot diberi kotak; v4: kata dipil maroon)
-  "sub": "Beras medium tembus Rp15 ribu per kilo, pemerintah siapkan operasi pasar.",  # 1 kalimat, maks ~18 kata
+  "kategori": "Economy",             # label kecil (v2, v5, v6), BAHASA INGGRIS
+  "judul": "Rice prices rise in 12 provinces",  # 3-9 kata BAHASA INGGRIS; otomatis HURUF BESAR
+  "sorot": "rise",                   # kata/frasa di judul yang disorot (v1: baris berisi sorot diberi kotak; v4: kata dipil maroon)
+  "sub": "Medium rice hits Rp15,000 per kg as the government prepares market operations.",  # 1 kalimat Inggris, maks ~18 kata
   "sumber": "Kompas"                 # nama sumber singkat untuk kaki slide
 }
 Teks yang tidak muat pada ukuran terkecil -> berhenti dengan GAGAL: perpendek.
@@ -97,7 +97,7 @@ def tag(d, x=M, y=56):
 def foot(d, src):
     y = H - 88
     f = F(BD, 26)
-    t = 'Baca di caption'
+    t = 'Read caption'
     w = tw(t, f)
     d.rounded_rectangle((M, y - 30, M + w + 86, y + 30), 10, fill=MAR)
     d.text((M + 22, y), t, font=f, fill=WH, anchor='lm')
@@ -106,7 +106,7 @@ def foot(d, src):
     d.line((ax + 13, y - 11, ax + 24, y), fill=WH, width=4)
     d.line((ax + 13, y + 11, ax + 24, y), fill=WH, width=4)
     if src:
-        d.text((W - M, y), 'Sumber: ' + src, font=F(MD, 24), fill=WH, anchor='rm')
+        d.text((W - M, y), 'Source: ' + src, font=F(MD, 24), fill=WH, anchor='rm')
 
 
 def chip(d, x, y, t, anchor='l', fill=MAR, fg=WH):
@@ -186,7 +186,7 @@ def v2(sp):
     hs = len(l2) * s2 * 1.32
     yb = H - 160 - hs                     # atas ringkasan
     yt = yb - 36 - len(ls) * s * LEAD     # atas judul
-    chip(d, M, yt - 74, sp.get('kategori') or 'Berita')
+    chip(d, M, yt - 74, sp.get('kategori') or 'News')
     lines_text(d, M, yt, ls, f, s, WH)
     y = yb
     for l in l2:
@@ -273,7 +273,7 @@ def v5(sp):
     y0 = 560
     d.rectangle((0, y0, W, y0 + hb), fill=(11, 11, 12, 245))
     tag(d)
-    d.text((M, y0 + 40), sp.get('kategori') or 'Berita', font=F(BD, 30), fill=WH)
+    d.text((M, y0 + 40), sp.get('kategori') or 'News', font=F(BD, 30), fill=WH)
     y = y0 + 120 - top
     y = lines_text(d, M, y, ls, f, s, ROSE)
     y = y - s * LEAD + bot + 30
@@ -291,7 +291,7 @@ def v6(sp):
     hs = len(l2) * s2 * 1.32
     yb = H - 170 - hs
     yt = yb - 40 - len(ls) * s * LEAD
-    chip(d, W / 2, yt - 76, sp.get('kategori') or 'Berita', 'c')
+    chip(d, W / 2, yt - 76, sp.get('kategori') or 'News', 'c')
     lines_text(d, W / 2, yt, ls, f, s, ROSE, 'c')
     y = yb
     for l in l2:
@@ -344,11 +344,11 @@ def cta(akun):
     d = ImageDraw.Draw(im)
     C, P = '#F7E3E6', (244, 154, 170)
     d.text((W / 2, 330), 'follow for more', font=F(XB, 96), fill=C, anchor='ms')
-    f2 = F(MD, 50); t = 'kabar tercepat tiap hari'; w = tw(t, f2); x = W / 2 - (w + 62) / 2
+    f2 = F(MD, 50); t = 'fastest news, every day'; w = tw(t, f2); x = W / 2 - (w + 62) / 2
     d.line((x + 4, 398, x + 38, 364), fill=P, width=7); d.line((x + 12, 364, x + 40, 364), fill=P, width=7); d.line((x + 38, 362, x + 38, 390), fill=P, width=7)
     d.text((x + 62, 400), t, font=f2, fill=C, anchor='ls')
     fl = F(MD, 30); y = H - 84
-    d.text((M + 8, y), 'Berita Viral', font=fl, fill=WH, anchor='lm')
+    d.text((M + 8, y), 'Viral News', font=fl, fill=WH, anchor='lm')
     w2 = tw(akun, fl)
     d.rounded_rectangle((W - M - 8 - w2 - 56, y - 31, W - M - 8, y + 31), 31, outline=WH, width=3)
     d.text((W - M - 8 - w2 / 2 - 28, y), akun, font=fl, fill=WH, anchor='mm')

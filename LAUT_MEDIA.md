@@ -30,7 +30,7 @@ sesi ini dipicu jadwal; bila sesi dipicu oleh pesanan (teks pemicu menyebut "Pes
 2. `ArtifactData get` doc `laut_cfg`. Bila tidak ada, pakai bawaan:
    ```
    {"aktif":true,"akun":"@buzzora.feed","nama":"BUZZORA","maks":3,
-    "fokus":"Berita nasional dan viral Indonesia yang sedang ramai dibicarakan, plus kabar penting Makassar dan Sulawesi Selatan",
+    "fokus":"Indonesian news for an international audience: what is trending and important in Indonesia (national, viral, economy, culture, plus Makassar and South Sulawesi), explained so readers outside Indonesia understand the context",
     "hindari":""}
    ```
    - `aktif` false → jawab "Laut sedang dijeda." lalu selesai.
@@ -41,7 +41,7 @@ sesi ini dipicu jadwal; bila sesi dipicu oleh pesanan (teks pemicu menyebut "Pes
    Catat `kunci` dan `judul` 3 hari terakhir: **jangan mengangkat cerita yang sama lagi**, kecuali ada perkembangan baru yang besar
    (sebut "perkembangan" di judul dan isi `lanjutan_dari` dengan id lama).
 
-## 2. Pantau berita (cepat, tapi diverifikasi)
+## 2. Pantau berita (cepat, tapi diverifikasi) — berita INDONESIA untuk pembaca internasional
 - WebSearch `mode: "standard"`, kirim 4-6 pencarian sekaligus dalam satu giliran, sesuai `fokus`, mis.
   "berita terkini hari ini", "viral hari ini Indonesia", "breaking news Indonesia", "berita Makassar hari ini", "Sulsel terkini",
   ditambah kata kunci fokus Jers. Bila hasil tipis atau basi, ulangi dengan `mode: "extended"`.
@@ -72,10 +72,13 @@ Satu-satunya mesin: `python3 toolkit/buzzora.py spek.json keluaran/` (baca docst
 - Spek:
   - `varian`: v1..v6 sesuai giliran.
   - `akun`: dari `laut_cfg` (bawaan `@buzzora.feed`).
-  - `kategori`: label pendek bergaya "Berita Ekonomi", "Berita Viral", "Berita Nasional", "Kabar Makassar", "Olahraga", "Teknologi", dll.
-  - `judul`: 3-9 kata, fakta terpenting, gaya media cepat (mis. "Harga beras naik di 12 provinsi"). Otomatis huruf besar.
-  - `sorot`: satu kata/frasa pendek yang ADA di `judul` dan paling penting (mis. "naik", "gempa", "resmi"). Dipakai v1 dan v4.
-  - `sub`: satu kalimat inti, maks ~18 kata (fakta + angka bila ada). Kutipan tokoh hanya bila tercatat di sumber yang kamu buka.
+  - **Semua teks slide BAHASA INGGRIS** (sejak 12 Nov 2026; label tetap seperti "Read caption", "Source" sudah otomatis dari mesin).
+  - `kategori`: label pendek bahasa Inggris: "Breaking", "Economy", "Politics", "Viral", "Tech", "Sports", "Entertainment", "Weather",
+    "Makassar", "Jakarta", "Bali", dll.
+  - `judul`: 3-9 kata bahasa Inggris, fakta terpenting, gaya media cepat (mis. "Rice prices rise in 12 provinces"). Otomatis huruf besar.
+    Sebut "Indonesia"/nama kota bila pembaca internasional perlu konteks tempat.
+  - `sorot`: satu kata/frasa pendek yang ADA di `judul` dan paling penting (mis. "rise", "earthquake", "official"). Dipakai v1 dan v4.
+  - `sub`: satu kalimat bahasa Inggris, maks ~18 kata (fakta + angka bila ada; rupiah boleh disertai kira-kira USD bila sumbernya menyebut).
   - `sumber`: nama sumber utama yang singkat (mis. "Kompas", "BMKG").
 - **Tanpa foto dari internet.** Sampul memakai latar grafis maroon; Jers menempelkan foto sendiri di kantor (tombol "Pasang foto")
   memakai `slide_01_overlay.png` + `foto.json`. Isi `foto_saran`: satu kalimat foto apa yang cocok (mis. "suasana antrean di pasar induk").
