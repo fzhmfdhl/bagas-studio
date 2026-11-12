@@ -9,3 +9,4 @@ Untuk pesanan podcast TikTok (`brand: "tok"`), yang bekerja adalah **Studio Nabi
 - Alat: `toolkit/studio.py` (pustaka + CLI). Aset: `assets/`. Contoh: `examples/`.
 - Jangan mengubah isi repo dari sesi studio terjadwal; file kerja taruh di direktori sementara.
 - Sejak 11 Nov 2026: riset+copy Instagram @jerapahmerah_ dipegang **Nadine** (baca **STUDIO_NADINE_COPY.md** saja; Threads dihentikan). **Rusdi** menjadi penjaga gerbang yang menilai copy dan mengevaluasi mingguan (baca **RUSDI_PENJAGA.md** saja).
+- Sejak 12 Nov 2026: **Laut** adalah media berita cepat (carousel IG 4:5, caption siap unggah). Sesi Laut membaca **LAUT_MEDIA.md** saja; mesin desainnya `toolkit/laut.py`.
