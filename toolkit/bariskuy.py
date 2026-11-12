@@ -10,13 +10,14 @@ Spek:
   "slides": [
     {"tipe": "a", "foto": "/path/foto1.jpg", "judul": "Pendaftaran Paskibraka 2026 resmi dibuka", "kredit": "COURTESY OF instagram.com/dispora.makassar"},
     {"tipe": "b", "foto": "/path/foto2.jpg", "judul": "...", "kredit": "..."},
-    {"tipe": "meme", "foto": "/path/foto3.jpg", "atas": "Pendaftaran Paskibraka dibuka", "sub": "siswa kelas X be like", "bawah": "On my way"}
+    {"tipe": "meme", "foto": "/path/foto3.jpg", "atas": "Pendaftaran Paskibraka dibuka", "sub": "siswa kelas X be like"}
   ]
 }
 Tipe:
   a    = foto penuh, kotak merah melayang di bawah berisi judul, logo BARIS KUY! di pojok kanan atas kotak.
   b    = foto di atas, blok merah penuh di bawah berisi judul besar, logo di batas foto.
-  meme = blok merah di atas (atas + sub), logo, foto di bawah dengan teks meme besar (bawah) bergaya outline.
+  meme = blok merah di atas (atas + sub), logo, lalu GAMBAR MEME DARI JERS apa adanya di bawah (tulisan meme, mis. "ON MY WAY",
+         sudah ada di gambarnya; mesin TIDAK menambah teks apa pun di atas foto).
 Judul otomatis HURUF BESAR. Teks yang tidak muat pada ukuran terkecil -> berhenti dengan GAGAL: perpendek.
 DESAIN DIKUNCI oleh Jers (12 Nov 2026): jangan mengubah warna, font, atau tata letak.
 """
@@ -143,12 +144,6 @@ def t_meme(sl):
         fs, l2, s2 = fit(sl['sub'].upper(), MD, W - 300, 1, 36, 24)
         d.text((70, y + 14), l2[0], font=fs, fill=WH)
     logo(im, W - 40, TOP - 130, 64)
-    d = ImageDraw.Draw(im)
-    if sl.get('bawah'):
-        fb, lb, sb = fit(sl['bawah'].upper(), 'Poppins-Bold.ttf', W - 120, 2, 120, 60)
-        y = H - 70 - (len(lb) - 1) * sb * 1.0
-        for l in lb:
-            outline(d, (W / 2, y), l, fb, sw=max(6, sb // 12)); y += sb * 1.0
     return im
 
 

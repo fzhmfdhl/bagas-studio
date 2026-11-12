@@ -20,9 +20,10 @@ Tiap pesanan berisi: `tipe` ("info" atau "meme"), `materi` (teks dari Jers), `fo
   slide 1 memuat judul utama; slide berikutnya boleh judul pendek pelengkap dari materi (mis. jadwal, syarat, lokasi), tetap bergantian a/b.
   - `judul`: inti info, maks ~14 kata, gaya akun ini (boleh diawali "RESMI!" bila memang pengumuman resmi). Dari materi Jers saja.
   - `kredit`: "COURTESY OF <kredit>" bila ada; bila kosong, hilangkan.
-- **Meme:** tipe `meme` (biasanya 1 slide). `atas` = konteks/peristiwa (mis. "Pendaftaran Paskibraka dibuka"), `sub` = format meme
-  (mis. "siswa kelas X be like"), `bawah` = punchline 1-4 kata (mis. "ON MY WAY"). Lucu, akrab, positif. Jangan merendahkan orang di foto,
-  tanpa body shaming, tanpa menyindir sekolah/pelatih/pihak tertentu, tanpa SARA.
+- **Meme:** tipe `meme` (biasanya 1 slide). Gambar meme dari Jers dipakai **apa adanya**: tulisan meme (mis. "ON MY WAY") sudah ada
+  di gambarnya, jangan menambah atau menulis ulang teks di atas foto. Kamu hanya mengisi blok merah atas: `atas` = konteks/peristiwa
+  (mis. "Pendaftaran Paskibraka dibuka") dan `sub` = format meme (mis. "siswa kelas X be like"), dari materi Jers.
+  Lucu, akrab, positif. Jangan merendahkan orang, tanpa body shaming, tanpa menyindir sekolah/pelatih/pihak tertentu, tanpa SARA.
 - Buka `out/lembar.jpg` dengan alat Read: teks terbaca, tidak terpotong, salah ketik, wajah penting di foto tidak tertutup kotak.
   Bila wajah tertutup di tipe `a`, pakai tipe `b`.
 
