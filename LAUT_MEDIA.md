@@ -33,7 +33,7 @@ sesi ini dipicu jadwal; bila sesi dipicu oleh pesanan (teks pemicu menyebut "Pes
     "fokus":"Indonesian news for an international audience: what is trending and important in Indonesia (national, viral, economy, culture, plus Makassar and South Sulawesi), explained so readers outside Indonesia understand the context",
     "hindari":""}
    ```
-   - `aktif` false → jawab "Laut sedang dijeda." lalu selesai.
+   - `aktif` false → jawab "Laut sedang dijeda." lalu selesai, KECUALI teks pemicu menyebut "Pencarian berita manual dari Jers" (tombol Cari berita di kantor): itu tetap dijalankan.
    - `akun` dipasang di slide (bawaan `@buzzora.feed`).
    - `maks` = paling banyak berapa carousel per sesi (1-3).
    - `hindari` = topik yang tidak boleh diangkat (teks bebas dari Jers). Patuhi.
@@ -106,6 +106,9 @@ Satu-satunya mesin: `python3 toolkit/buzzora.py spek.json keluaran/` (baca docst
     "sumber":[{"nama":"Kompas","url":"https://..."}],
     "terbit_sumber":"jam terbit berita paling awal yang kamu temukan, ISO +08:00"}
    ```
-3. Jawaban akhir sesi: satu baris per carousel (judul + id). Jangan menulis apa pun ke dokumen lain.
+3. **Pencarian manual:** bila teks pemicu menyebut "Pencarian berita manual dari Jers", di akhir sesi (juga bila hasilnya nol)
+   `ArtifactData get` doc `laut_cari` lalu `update` (pakai `if_version`): `{"selesai":"waktu ISO +08:00","hasil":<jumlah carousel sesi ini>}`.
+   Ini yang mematikan status "Sedang bekerja" Laut di kantor.
+4. Jawaban akhir sesi: satu baris per carousel (judul + id). Selain `lm_...`, pesanan `laut_req`, dan `laut_cari`, jangan menulis ke dokumen lain.
 
 Jangan memposting atau menjadwalkan ke Metricool, Zernio, atau platform mana pun. Jangan mengubah isi repo.
