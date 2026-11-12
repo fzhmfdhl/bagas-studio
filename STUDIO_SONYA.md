@@ -66,7 +66,7 @@ boleh dipelajari, bukan kewajiban dan bukan template.
 ---------------------------------------------------------------------------------------------------
 ## Suara
 
-- Suara Nuancier: perempuan Indonesia ramah dan muda. Default **Luna** `BfwyZzLnL4udYd1qYpiN`
+- Suara Nuancier: perempuan Indonesia ramah dan muda. Default **Tatiana** `j0AZXresFSzazxkLuA7x` (pilihan Jers 12 Nov 2026; JANGAN pakai `BfwyZzLnL4udYd1qYpiN`, itu suara Nabila)
   (pilihan Jers; alternatif lama: Kak Ceria `d15jrIAARvF899pDoC6T`). Pakai `studio_meta.voice_id_nua` bila ada; kalau kosong, simpan default di atas. Voice over WAJIB ada di setiap video motion Nuancier (`vo: true`), dan harus terdengar di hasil akhir (periksa `ffmpeg ... volumedetect`: rata-rata sekitar -20 dB, bukan senyap).
   Jangan memanggil `creative_list_voices` kecuali suara itu gagal dipakai.
 - Panggilan sama seperti Bagas: `creative_generate_speech`, `model_id: "eleven_v4"`, **`generations_count: 1`**, baris dipisah baris kosong,
