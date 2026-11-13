@@ -49,4 +49,7 @@ Enam kandidat harus berbeda sudut (alat berbeda, hook berbeda). Satu Reel = satu
 ```
 Putaran ulang: pertahankan kandidat yang `lolos`, ganti hanya yang ditolak sesuai `catatan_rusdi`, naikkan `putaran`, status kembali `menunggu_rusdi`.
 Setelah menyimpan, panggil alat `fire_trigger` (server Claude Code Remote) untuk jadwal "Rusdi periksa copy" (id diberikan di prompt sesi).
+Terakhir (juga bila sesi berhenti karena tidak ada slot "belum"): `ArtifactData get` doc `nadine_riset`; bila ada, `update` (pakai `if_version`)
+`{"selesai":"waktu ISO +08:00","slot":"<hari slot atau 'tidak ada slot'>"}`. Ini mematikan status "Sedang bekerja" Nadine di kantor
+(tombol "Mulai riset copy IG sekarang" menulis `t` ke dokumen itu). Bila dokumennya tidak ada, lewati.
 Jangan memposting atau menjadwalkan apa pun ke Metricool, Zernio, atau platform lain. Jangan mengubah isi repo.
