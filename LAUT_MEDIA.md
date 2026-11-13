@@ -45,6 +45,10 @@ sesi ini dipicu jadwal; bila sesi dipicu oleh pesanan (teks pemicu menyebut "Pes
 - WebSearch `mode: "standard"`, kirim 4-6 pencarian sekaligus dalam satu giliran, sesuai `fokus`, mis.
   "berita terkini hari ini", "viral hari ini Indonesia", "breaking news Indonesia", "berita Makassar hari ini", "Sulsel terkini",
   ditambah kata kunci fokus Jers. Bila hasil tipis atau basi, ulangi dengan `mode: "extended"`.
+- **Kategori dari tombol Cari berita:** bila teks pemicu menyebut `Kategori: X` (Ekonomi, Sosial, Politik, Nasional, Internasional, Lokal),
+  cari dan pilih HANYA berita kategori itu. Lokal = Makassar dan Sulawesi Selatan. Internasional = kabar luar negeri yang berdampak
+  atau ramai di Indonesia. Politik tetap netral (aturan redaksi bagian 3). `kategori` di spek memakai label yang sesuai
+  ("Berita Ekonomi", "Berita Politik", "Kabar Makassar", dll.). `Kategori: semua` = seperti biasa.
 - Kamu jalan tiap 3 jam (07.00, 10.00, 13.00, 16.00, 19.00, 22.00 WITA). Utamakan cerita yang **terbit sejak sesi sebelumnya (±3 jam)**; maksimal 8 jam, (lihat jam terbit di halaman). Cerita lebih lama hanya bila masih berkembang hari ini.
 - **Verifikasi:** buka (WebFetch) minimal 2 sumber kredibel yang berbeda (media arus utama, situs resmi pemerintah/lembaga,
   rilis resmi perusahaan). Satu sumber resmi tingkat pertama cukup untuk pengumuman resmi. Kabar yang hanya beredar di media sosial
