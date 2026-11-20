@@ -89,8 +89,24 @@ Pengenal tokoh (jangan sampai keliru): **Herman** kumis, kaus tengkorak · **Rus
 ---------------------------------------------------------------------------------------------------
 ## Cara membuat gambar (pipeline podcast)
 
-**Bahan** (`assets/podcast/`): `bg_olive.jpg` (pilar 1 dan 2), `bg_navy_rusdi.jpg` (pilar 3), `mic_sheet.jpg` (mikrofon).
-Sheet tokoh dibuat Jers: satu zip per tokoh, tiap sheet 3 sel pose (hijau chroma-key), pose bicara, diam, kedip, gestur.
+**Bahan** (`assets/podcast/`): `bg_olive.jpg` (pilar 1 dan 2), `bg_navy_rusdi.jpg` (pilar 3), `mic_sheet.jpg` (mikrofon),
+`sheets/` (sheet tokoh buatan Jers: Nabila, Herman, Rusdi, Laut, Bagas, Baby, Nadine, Sonya, SonyaB; tiap sheet 3 sel pose di latar hijau chroma-key).
+
+**Alat** (`toolkit/podcast/`): `cut.py` (potong dan key sheet jadi sel), `render_dua.py` (renderer dua tokoh berjejer; untuk satu narasumber atur `CH_` dan bidikan),
+`musik.py` (lo-fi + ducking), `words.py`, `norm.json` (ukuran kursi per tokoh), `contoh/` (skrip Herman–Sonya dan Nadine–Sonya yang sudah dikunci: pembuatan mix audio dan render).
+
+**Menyiapkan folder kerja** (jangan bekerja di dalam repo; ini hasilnya sementara):
+```
+bash toolkit/podcast/siapkan.sh /tmp/pod      # menyalin alat, menaut sheet, memotong 100+ sel (hasilnya identik dengan episode terkunci)
+cd /tmp/pod
+# taruh audio episode di ep3/ lalu: python3 mix_dua.py (lihat contoh/mix_nadine_sonya.py) -> ep3/mix.wav + ep3/tl.json
+# python3 musik.py -> ep3/mix_musik.wav
+# python3 render_dua.py still 3 20   # cek frame dulu
+# python3 render_dua.py              # render penuh (sekitar 1 menit per 48 detik)
+```
+Latar navy Rusdi: salin `env_navy.jpg` ke `env2.jpg` di folder kerja (pilar 3), atau ganti nama berkas yang dibuka `render_dua.py`.
+Skrip memakai jalur relatif (`ep3/`, `cells/`, `lz/`); `contoh/mix_*.py` masih berisi nama peristiwa episode lama, jadi salin dan sesuaikan, bukan dijalankan mentah.
+
 
 **Prinsip:**
 - **Kanvas kerja 3840x2160, dipotong ke 1920x1080.** Latar diskalakan ke tinggi kanvas.
@@ -157,7 +173,6 @@ Pesanan `proses` yang `diperbarui` lebih dari 90 menit lalu dianggap macet.
 - Suara tetap Rusdi, Laut, Bagas, Baby (sekarang sementara atau kosong).
 - Jumlah episode per minggu per pilar, dan siapa yang menentukan topik.
 - Pasangan tokoh untuk Laut, Asmara, dan Bagas di pilar 2; format cover/thumbnail dan caption.
-- Pindahan skrip render dan sheet tokoh ke repo ini (sementara masih ada di folder kerja sesi sebelumnya; tanpa itu perlu dibangun ulang dari prinsip di atas).
 
 ## Pelajaran bulanan
 
