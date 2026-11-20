@@ -114,6 +114,8 @@ Selalu tulis dengan `if_version` dari bacaan terakhir. Gagal karena versi beruba
    `s` = id tokoh persis (`Nabila`, `SonyaB`, `Herman`, ...). Boleh beri `jeda` negatif (menyela, mis. -0.15) untuk sambaran,
    `jenis:"tawa"` untuk tawa (teksnya tag ElevenLabs, mis. `[laughs]`), dan `pose` dari `pose_aman.json` untuk gestur penting.
 4. `update`: `naskah`, `topik`, `sudut`, `tokoh`, `status: "naskah"`, `log`.
+5. **BERHENTI di sini dan akhiri sesi.** Jangan membuat suara atau merender di sesi yang sama, walaupun pesanan berasal dari request Jers.
+   Hanya Jers yang mengubah status ke `render` (tombol "Setuju, buat videonya"). Suara ElevenLabs memakai kredit Jers, jadi tidak boleh dibuat sebelum naskah disetujui.
 
 Jers menekan "Minta naskah lain" → status kembali `antre` dengan `catatan`: tulis ulang sesuai catatan.
 
