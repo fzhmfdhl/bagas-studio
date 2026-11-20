@@ -1,0 +1,129 @@
+{
+ "_catatan": "idle = (mulut tutup, mulut buka, kedip). mulut = titik mulut di sel idle (piksel sel 458x768). hadap = arah asli sheet. tawa = sel saat tertawa. suara = voice ElevenLabs.",
+ "Nabila": {
+  "idle": [
+   "30",
+   "31",
+   "32"
+  ],
+  "mulut": [
+   235,
+   198
+  ],
+  "hadap": "kiri",
+  "tawa": "02",
+  "suara": "BfwyZzLnL4udYd1qYpiN"
+ },
+ "Sonya": {
+  "idle": [
+   "00",
+   "01",
+   "02"
+  ],
+  "mulut": [
+   225,
+   188
+  ],
+  "hadap": "kanan",
+  "tawa": "22",
+  "suara": "j0AZXresFSzazxkLuA7x"
+ },
+ "SonyaB": {
+  "idle": [
+   "00",
+   "01",
+   "02"
+  ],
+  "mulut": [
+   240,
+   218
+  ],
+  "hadap": "kanan",
+  "tawa": "22",
+  "suara": "j0AZXresFSzazxkLuA7x"
+ },
+ "Herman": {
+  "idle": [
+   "00",
+   "01",
+   "02"
+  ],
+  "mulut": [
+   250,
+   205
+  ],
+  "hadap": "kanan",
+  "tawa": "12",
+  "suara": "q8qwd1jY2jS3AWOBeq25"
+ },
+ "Nadine": {
+  "idle": [
+   "00",
+   "01",
+   "02"
+  ],
+  "mulut": [
+   262,
+   178
+  ],
+  "hadap": "kanan",
+  "tawa": "22",
+  "suara": "y1LQSw6x4O5I1qZEI77j"
+ },
+ "Rusdi": {
+  "idle": [
+   "00",
+   "01",
+   "02"
+  ],
+  "mulut": [
+   228,
+   184
+  ],
+  "hadap": "kanan",
+  "tawa": "31",
+  "suara": "c7qhpQfip2KUutIXYbRI"
+ },
+ "Laut": {
+  "idle": [
+   "00",
+   "01",
+   "02"
+  ],
+  "mulut": [
+   242,
+   180
+  ],
+  "hadap": "kanan",
+  "tawa": "22",
+  "suara": "gQQvBatMocMgEreeSqHb"
+ },
+ "Bagas": {
+  "idle": [
+   "00",
+   "01",
+   "02"
+  ],
+  "mulut": [
+   234,
+   182
+  ],
+  "hadap": "kanan",
+  "tawa": "30",
+  "suara": "2lcxSPWqG78QhJnKPyMX"
+ },
+ "Baby": {
+  "idle": [
+   "00",
+   "01",
+   "02"
+  ],
+  "mulut": [
+   240,
+   180
+  ],
+  "hadap": "kanan",
+  "tawa": "30",
+  "suara": null
+ }
+}
