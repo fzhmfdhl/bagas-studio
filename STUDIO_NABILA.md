@@ -43,7 +43,7 @@ Data teknis tiap tokoh (sel idle, titik mulut, arah hadap, sel tawa, **voice Ele
 | `Rusdi` | Adrianleoh `c7qhpQfip2KUutIXYbRI` (sementara) | kacamata, kalung ID, celana hijau | kepala staf konten, paham marketing |
 | `Laut` | Baron `gQQvBatMocMgEreeSqHb` (sementara) | keriting berjenggot, kemeja kotak | fiksi: anak muda yang pernah ditahan saat demo, terinspirasi Biru Laut (*Laut Bercerita*). Nada hormat, jangan jadi lelucon. |
 | `Bagas` | Genesius `2lcxSPWqG78QhJnKPyMX` (sementara) | hoodie krem, celana pendek pink, kacamata | desainer, kalem |
-| `Baby` | **belum ada** | rambut merah dikuncir, jaket biru | **jangan dipakai** sampai Jers memberi suara |
+| `Baby` | Velora `TrU3igk19A4aIUi2GAA2` | rambut merah dikuncir, jaket biru | asisten Nisa dan editor vlog; ceria, cerewet, cepat nyambung |
 
 `Sonya` (sheet lama, kursi kayu) masih ada di tokoh.json, tetapi pakai **`SonyaB`** untuk episode baru.
 Asmara (kemeja putih) **bukan** Nabila dan tidak punya sheet podcast.
@@ -100,7 +100,7 @@ Selalu tulis dengan `if_version` dari bacaan terakhir. Gagal karena versi beruba
    - Kalau ada pesanan berstatus `naskah`, `review`, atau `setuju` → jawab "Menunggu Jers." dan selesai.
    - Kalau belum ada pesanan landscape yang **dibuat hari ini** (WITA) → buat pesanan harian sendiri (`sumber: "harian"`):
      pilar bergilir **procons → anak → rusdi** (lanjut dari pilar pesanan landscape terakhir), tokoh dipilih yang paling jarang tampil
-     di 6 pesanan terakhir (pilar `anak`: dua tokoh berbeda; jangan Baby). Bentuk dokumennya sama dengan yang dibuat halaman:
+     di 6 pesanan terakhir (pilar `anak`: dua tokoh berbeda). Bentuk dokumennya sama dengan yang dibuat halaman:
      `{jenis:"studio", brand:"tok", format:"landscape", id, pilar, tokoh, sumber:"harian", dibuat, diperbarui, topik:"", sudut:"", naskah:null, suara:null, caption:"", tagar:[], status:"antre", tahap:"", catatan:"", lampiran:[], video:null, log}`. Lalu kerjakan.
 3. **Kunci**: `status: "proses"`, `tahap`, `diperbarui`, `log`.
 4. Kerjakan tahapnya (di bawah). 5. Tulis hasil. 6. Galat yang tidak bisa diselesaikan → `status: "gagal"`, `log` jelas. **Jangan biarkan `proses`.**
